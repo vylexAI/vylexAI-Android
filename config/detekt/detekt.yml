@@ -1,0 +1,30 @@
+build:
+  maxIssues: 0
+
+style:
+  MaxLineLength:
+    maxLineLength: 140
+  MagicNumber:
+    ignorePropertyDeclaration: true
+    ignoreAnnotation: true
+    ignoreCompanionObjectPropertyDeclaration: true
+  WildcardImport:
+    active: true
+  ReturnCount:
+    max: 4
+
+complexity:
+  LongParameterList:
+    functionThreshold: 8
+    constructorThreshold: 8
+  TooManyFunctions:
+    thresholdInClasses: 20
+
+naming:
+  FunctionNaming:
+    # Compose composables are PascalCase by convention
+    ignoreAnnotated: ['Composable']
+
+empty-blocks:
+  EmptyFunctionBlock:
+    ignoreOverridden: true

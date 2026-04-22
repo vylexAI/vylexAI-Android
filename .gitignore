@@ -1,0 +1,39 @@
+# Gradle
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+!**/src/**/build/
+
+# Android
+local.properties
+*.iml
+*.ipr
+*.iws
+.idea/
+captures/
+*.apk
+*.aab
+*.ap_
+*.dex
+*.class
+
+# Kotlin
+.kotlin/
+
+# macOS
+.DS_Store
+
+# Secrets
+keystore.properties
+*.jks
+*.keystore
+release/
+
+# Logs
+*.log
+
+# Node / tooling
+node_modules/
+.env
+.env.*
+!.env.example

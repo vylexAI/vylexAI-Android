@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.VylexAI" parent="android:Theme.Material.NoActionBar">
+        <item name="android:statusBarColor">#05070C</item>
+        <item name="android:navigationBarColor">#05070C</item>
+        <item name="android:windowBackground">#05070C</item>
+    </style>
+    <style name="Theme.VylexAI.Splash" parent="Theme.VylexAI">
+        <item name="android:windowBackground">#05070C</item>
+    </style>
+</resources>
