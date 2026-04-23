@@ -9,6 +9,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,20 +17,21 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.vylexai.app.domain.device.DeviceReport
 import com.vylexai.app.ui.components.BrandMark
 import com.vylexai.app.ui.components.GlassCard
 import com.vylexai.app.ui.components.MetricTile
@@ -38,61 +40,21 @@ import com.vylexai.app.ui.components.SectionTitle
 import com.vylexai.app.ui.components.VylexBackdrop
 import com.vylexai.app.ui.theme.VylexPalette
 import com.vylexai.app.ui.theme.VylexTheme
-import kotlinx.coroutines.delay
-
-private data class ScanReport(
-    val model: String,
-    val android: String,
-    val cpu: String,
-    val gpu: String,
-    val ramGb: Int,
-    val freeGb: Int,
-    val battery: Int,
-    val tempC: Int,
-    val netMbps: Int,
-    val netType: String,
-    val nnapi: Boolean,
-    val vulkan: Boolean,
-    val score: Int,
-    val estimateBsai: String
-)
-
-private val mockReport = ScanReport(
-    model = "Pixel 9 Pro",
-    android = "15",
-    cpu = "Tensor G4 · 8 cores · 3.1 GHz",
-    gpu = "Mali-G715 MP7",
-    ramGb = 16,
-    freeGb = 182,
-    battery = 87,
-    tempC = 29,
-    netMbps = 412,
-    netType = "Wi-Fi 6E",
-    nnapi = true,
-    vulkan = true,
-    score = 842,
-    estimateBsai = "$18 – $32 / month"
-)
 
 @Composable
-fun DeviceScanScreen(onDone: () -> Unit) {
-    var phase by remember { mutableStateOf(0) } // 0 = scanning, 1 = report
-
-    LaunchedEffect(Unit) {
-        delay(2200)
-        phase = 1
-    }
-
+fun DeviceScanScreen(onDone: () -> Unit, viewModel: DeviceScanViewModel = hiltViewModel()) {
+    val state by viewModel.state.collectAsStateWithLifecycle()
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .verticalScroll(rememberScrollState())
             .padding(horizontal = 24.dp, vertical = 48.dp),
         horizontalAlignment = Alignment.Start
     ) {
-        if (phase == 0) {
-            ScanningState()
-        } else {
-            ReportState(report = mockReport, onDone = onDone)
+        when (val s = state) {
+            is DeviceScanState.Scanning -> ScanningState()
+            is DeviceScanState.Ready -> ReportState(report = s.report, onDone = onDone)
+            is DeviceScanState.Error -> ErrorState(message = s.message, onRetry = viewModel::rescan)
         }
     }
 }
@@ -113,7 +75,9 @@ private fun ColumnScope.ScanningState() {
         contentAlignment = Alignment.Center
     ) {
         CircularProgressIndicator(
-            modifier = Modifier.size(220.dp).rotate(a),
+            modifier = Modifier
+                .size(220.dp)
+                .rotate(a),
             color = VylexPalette.Cyan300,
             strokeWidth = 2.dp
         )
@@ -133,10 +97,25 @@ private fun ColumnScope.ScanningState() {
     )
 }
 
-private typealias ColumnScope = androidx.compose.foundation.layout.ColumnScope
+@Composable
+private fun ColumnScope.ErrorState(message: String, onRetry: () -> Unit) {
+    Text(
+        text = "Couldn't scan this device",
+        style = MaterialTheme.typography.displaySmall,
+        color = VylexPalette.Text100
+    )
+    Text(
+        text = message,
+        style = MaterialTheme.typography.bodyMedium,
+        color = VylexPalette.Text300,
+        modifier = Modifier.padding(top = 8.dp)
+    )
+    Spacer(Modifier.height(20.dp))
+    PrimaryButton(text = "Try again", onClick = onRetry)
+}
 
 @Composable
-private fun ReportState(report: ScanReport, onDone: () -> Unit) {
+private fun ReportState(report: DeviceReport, onDone: () -> Unit) {
     Text(
         text = "Device profile",
         style = MaterialTheme.typography.displaySmall,
@@ -144,7 +123,7 @@ private fun ReportState(report: ScanReport, onDone: () -> Unit) {
     )
     Spacer(Modifier.height(6.dp))
     Text(
-        text = "${report.model} · Android ${report.android}",
+        text = "${report.model} · Android ${report.androidSdk}",
         style = MaterialTheme.typography.bodyLarge,
         color = VylexPalette.Text300
     )
@@ -153,13 +132,14 @@ private fun ReportState(report: ScanReport, onDone: () -> Unit) {
     Row(horizontalArrangement = Arrangement.spacedBy(12.dp), modifier = Modifier.fillMaxWidth()) {
         MetricTile(
             label = "Performance score",
-            value = report.score.toString(),
+            value = report.performanceScore.toString(),
             trailing = "/ 1000",
             modifier = Modifier.weight(1f)
         )
         MetricTile(
             label = "Estimated BSAI",
-            value = report.estimateBsai,
+            value = "${report.estimateMonthlyBsai.first}–${report.estimateMonthlyBsai.second}",
+            trailing = "/ mo",
             accent = VylexPalette.Emerald400,
             modifier = Modifier.weight(1f)
         )
@@ -169,8 +149,15 @@ private fun ReportState(report: ScanReport, onDone: () -> Unit) {
     Spacer(Modifier.height(10.dp))
     GlassCard(modifier = Modifier.fillMaxWidth()) {
         Column {
-            SpecRow("CPU", report.cpu)
-            SpecRow("GPU", report.gpu)
+            SpecRow(
+                "CPU",
+                buildString {
+                    append(report.cpu.model ?: "—")
+                    append(" · ${report.cpu.cores} cores")
+                    report.cpu.maxFrequencyMhz?.let { append(" · ${it / 1000f} GHz") }
+                }
+            )
+            SpecRow("GPU", report.gpu ?: "—")
             SpecRow("Memory", "${report.ramGb} GB")
             SpecRow("Free storage", "${report.freeGb} GB")
             SpecRow("NNAPI", if (report.nnapi) "available" else "—")
@@ -181,17 +168,26 @@ private fun ReportState(report: ScanReport, onDone: () -> Unit) {
     SectionTitle(text = "Live state")
     Spacer(Modifier.height(10.dp))
     Row(horizontalArrangement = Arrangement.spacedBy(12.dp), modifier = Modifier.fillMaxWidth()) {
-        MetricTile(label = "Battery", value = "${report.battery}%", modifier = Modifier.weight(1f))
-        MetricTile(label = "Temp", value = "${report.tempC}°C", modifier = Modifier.weight(1f))
+        MetricTile(
+            label = "Battery",
+            value = "${report.battery.percent}%",
+            modifier = Modifier.weight(1f)
+        )
+        MetricTile(
+            label = "Temp",
+            value = "${report.battery.temperatureC}°C",
+            modifier = Modifier.weight(1f)
+        )
         MetricTile(
             label = "Network",
-            value = "${report.netMbps}",
+            value = report.network.downlinkMbps?.toString() ?: "—",
             trailing = "Mbps",
             modifier = Modifier.weight(1f)
         )
     }
     Spacer(Modifier.height(24.dp))
     PrimaryButton(text = "Enter Provider Dashboard", onClick = onDone)
+    Spacer(Modifier.height(24.dp))
 }
 
 @Composable
@@ -205,11 +201,11 @@ private fun SpecRow(label: String, value: String, last: Boolean = false) {
         Text(label, style = MaterialTheme.typography.bodyMedium, color = VylexPalette.Text500)
         Text(value, style = MaterialTheme.typography.bodyMedium, color = VylexPalette.Text100)
     }
-    if (!last) Box(modifier = Modifier.fillMaxWidth().height(1.dp).padding(horizontal = 0.dp))
+    if (!last) Box(modifier = Modifier.fillMaxWidth().height(1.dp))
 }
 
 @Preview
 @Composable
 private fun DeviceScanPreview() {
-    VylexTheme { VylexBackdrop { DeviceScanScreen(onDone = {}) } }
+    VylexTheme { VylexBackdrop { /* live preview needs Hilt; use Studio preview at runtime */ } }
 }
