@@ -14,10 +14,6 @@ BASE_UNIT_COST_BSAI = Decimal("0.002")
 
 
 async def _user_balance(db, user_id) -> Decimal:
-    result = await db.scalar(
-        select(LedgerEntry.amount_bsai).where(LedgerEntry.user_id == user_id)
-    )
-    # SUM properly
     from sqlalchemy import func
 
     total = await db.scalar(
