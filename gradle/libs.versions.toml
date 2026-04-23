@@ -47,7 +47,7 @@ junit = "4.13.2"
 androidx-test-ext = "1.2.1"
 espresso = "3.6.1"
 turbine = "1.2.0"
-mockk = "1.13.13"
+mockk = "1.14.9"
 
 [libraries]
 # AndroidX
