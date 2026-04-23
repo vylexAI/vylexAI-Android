@@ -8,7 +8,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
@@ -22,11 +21,7 @@ import com.vylexai.app.ui.theme.VylexPalette
  * A trunk with three branches, each ending in a node dot. Echoes the vylexai.com wordmark.
  */
 @Composable
-fun BrandMark(
-    modifier: Modifier = Modifier,
-    size: Dp = 96.dp,
-    tint: Color = VylexPalette.Cyan300
-) {
+fun BrandMark(modifier: Modifier = Modifier, size: Dp = 96.dp, tint: Color = VylexPalette.Cyan300) {
     Box(modifier = modifier.size(size), contentAlignment = Alignment.Center) {
         Canvas(modifier = Modifier.fillMaxSize()) {
             val w = this.size.width

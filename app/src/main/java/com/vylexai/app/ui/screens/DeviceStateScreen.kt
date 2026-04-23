@@ -35,13 +35,33 @@ fun DeviceStateScreen(onBack: () -> Unit) {
                 .padding(horizontal = 20.dp, vertical = 16.dp)
         ) {
             Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                MetricTile(label = "Battery", value = "87%", accent = VylexPalette.Emerald400, modifier = Modifier.weight(1f))
-                MetricTile(label = "Temp", value = "29°C", accent = VylexPalette.Amber400, modifier = Modifier.weight(1f))
+                MetricTile(
+                    label = "Battery",
+                    value = "87%",
+                    accent = VylexPalette.Emerald400,
+                    modifier = Modifier.weight(1f)
+                )
+                MetricTile(
+                    label = "Temp",
+                    value = "29°C",
+                    accent = VylexPalette.Amber400,
+                    modifier = Modifier.weight(1f)
+                )
             }
             Spacer(Modifier.height(12.dp))
             Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                MetricTile(label = "Network", value = "412", trailing = "Mbps", modifier = Modifier.weight(1f))
-                MetricTile(label = "Memory free", value = "11.2", trailing = "GB", modifier = Modifier.weight(1f))
+                MetricTile(
+                    label = "Network",
+                    value = "412",
+                    trailing = "Mbps",
+                    modifier = Modifier.weight(1f)
+                )
+                MetricTile(
+                    label = "Memory free",
+                    value = "11.2",
+                    trailing = "GB",
+                    modifier = Modifier.weight(1f)
+                )
             }
 
             Spacer(Modifier.height(20.dp))

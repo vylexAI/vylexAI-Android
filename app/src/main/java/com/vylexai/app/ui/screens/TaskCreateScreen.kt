@@ -11,8 +11,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.MaterialTheme
@@ -123,19 +123,52 @@ fun TaskCreateScreen(onBack: () -> Unit) {
             Spacer(Modifier.height(10.dp))
             GlassCard(modifier = Modifier.fillMaxWidth()) {
                 Column {
-                    Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()) {
-                        Text("Batch size", color = VylexPalette.Text500, style = MaterialTheme.typography.bodyMedium)
-                        Text("512", color = VylexPalette.Text100, style = MaterialTheme.typography.bodyMedium)
+                    Row(
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text(
+                            "Batch size",
+                            color = VylexPalette.Text500,
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                        Text(
+                            "512",
+                            color = VylexPalette.Text100,
+                            style = MaterialTheme.typography.bodyMedium
+                        )
                     }
                     Spacer(Modifier.height(10.dp))
-                    Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()) {
-                        Text("Replication (N)", color = VylexPalette.Text500, style = MaterialTheme.typography.bodyMedium)
-                        Text("3", color = VylexPalette.Text100, style = MaterialTheme.typography.bodyMedium)
+                    Row(
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text(
+                            "Replication (N)",
+                            color = VylexPalette.Text500,
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                        Text(
+                            "3",
+                            color = VylexPalette.Text100,
+                            style = MaterialTheme.typography.bodyMedium
+                        )
                     }
                     Spacer(Modifier.height(10.dp))
-                    Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()) {
-                        Text("Deadline", color = VylexPalette.Text500, style = MaterialTheme.typography.bodyMedium)
-                        Text("6 hours", color = VylexPalette.Text100, style = MaterialTheme.typography.bodyMedium)
+                    Row(
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text(
+                            "Deadline",
+                            color = VylexPalette.Text500,
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                        Text(
+                            "6 hours",
+                            color = VylexPalette.Text100,
+                            style = MaterialTheme.typography.bodyMedium
+                        )
                     }
                 }
             }
@@ -148,11 +181,7 @@ fun TaskCreateScreen(onBack: () -> Unit) {
 }
 
 @Composable
-private fun VylexField(
-    value: String,
-    onValueChange: (String) -> Unit,
-    label: String
-) {
+private fun VylexField(value: String, onValueChange: (String) -> Unit, label: String) {
     OutlinedTextField(
         value = value,
         onValueChange = onValueChange,

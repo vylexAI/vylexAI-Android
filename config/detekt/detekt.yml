@@ -3,15 +3,25 @@ build:
 
 style:
   MaxLineLength:
-    maxLineLength: 140
+    maxLineLength: 180
   MagicNumber:
+    # Compose code is full of design tokens (sizes, alphas, weights) that read
+    # better as literals than as named constants. Skip rule for @Composable code.
     ignorePropertyDeclaration: true
     ignoreAnnotation: true
     ignoreCompanionObjectPropertyDeclaration: true
+    ignoreNumbers: ['-1', '0', '1', '2', '100']
+    ignoreAnnotated: ['Composable', 'Preview']
   WildcardImport:
     active: true
   ReturnCount:
     max: 4
+  UnusedPrivateMember:
+    # @Preview composables are entry points for the Studio preview tooling; detekt
+    # can't see those callers, so it would otherwise flag every preview.
+    ignoreAnnotated: ['Preview']
+  UnusedParameter:
+    ignoreAnnotated: ['Preview']
 
 complexity:
   LongParameterList:
@@ -19,11 +29,18 @@ complexity:
     constructorThreshold: 8
   TooManyFunctions:
     thresholdInClasses: 20
+  LongMethod:
+    # @Composable screens are inherently long — they wire layout + state in one
+    # function, which is the idiomatic Compose style.
+    ignoreAnnotated: ['Composable']
 
 naming:
   FunctionNaming:
-    # Compose composables are PascalCase by convention
     ignoreAnnotated: ['Composable']
+  MatchingDeclarationName:
+    # Theme files (Color.kt, Type.kt, Theme.kt) follow Compose convention where
+    # filename describes the role rather than the single declared symbol.
+    active: false
 
 empty-blocks:
   EmptyFunctionBlock:

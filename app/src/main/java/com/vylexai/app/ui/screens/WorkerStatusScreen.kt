@@ -70,9 +70,17 @@ fun WorkerStatusScreen(onBack: () -> Unit) {
                     )
                     Spacer(Modifier.height(8.dp))
                     Row {
-                        Text("64%", style = MaterialTheme.typography.labelMedium, color = VylexPalette.Cyan300)
+                        Text(
+                            "64%",
+                            style = MaterialTheme.typography.labelMedium,
+                            color = VylexPalette.Cyan300
+                        )
                         Spacer(Modifier.weight(1f))
-                        Text("est. 1m 14s left", style = MaterialTheme.typography.labelMedium, color = VylexPalette.Text500)
+                        Text(
+                            "est. 1m 14s left",
+                            style = MaterialTheme.typography.labelMedium,
+                            color = VylexPalette.Text500
+                        )
                     }
                 }
             }
@@ -81,12 +89,27 @@ fun WorkerStatusScreen(onBack: () -> Unit) {
             Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                 MetricTile(label = "CPU", value = "62%", modifier = Modifier.weight(1f))
                 MetricTile(label = "Memory", value = "1.8 GB", modifier = Modifier.weight(1f))
-                MetricTile(label = "Temp", value = "34°C", accent = VylexPalette.Amber400, modifier = Modifier.weight(1f))
+                MetricTile(
+                    label = "Temp",
+                    value = "34°C",
+                    accent = VylexPalette.Amber400,
+                    modifier = Modifier.weight(1f)
+                )
             }
             Spacer(Modifier.height(12.dp))
             Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                MetricTile(label = "Network", value = "31", trailing = "Mbps", modifier = Modifier.weight(1f))
-                MetricTile(label = "Charge", value = "83%", accent = VylexPalette.Emerald400, modifier = Modifier.weight(1f))
+                MetricTile(
+                    label = "Network",
+                    value = "31",
+                    trailing = "Mbps",
+                    modifier = Modifier.weight(1f)
+                )
+                MetricTile(
+                    label = "Charge",
+                    value = "83%",
+                    accent = VylexPalette.Emerald400,
+                    modifier = Modifier.weight(1f)
+                )
             }
 
             Spacer(Modifier.height(24.dp))
@@ -96,14 +119,22 @@ fun WorkerStatusScreen(onBack: () -> Unit) {
                 GlassCard(modifier = Modifier.fillMaxWidth()) {
                     Row(verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {
                         Column(modifier = Modifier.weight(1f)) {
-                            Text("Task #${1284 - i}", style = MaterialTheme.typography.bodyMedium, color = VylexPalette.Text100)
+                            Text(
+                                "Task #${1284 - i}",
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = VylexPalette.Text100
+                            )
                             Text(
                                 "Completed · 0.018 BSAI",
                                 style = MaterialTheme.typography.labelMedium,
                                 color = VylexPalette.Text500
                             )
                         }
-                        Text("${12 + i}m ago", style = MaterialTheme.typography.labelMedium, color = VylexPalette.Text500)
+                        Text(
+                            "${12 + i}m ago",
+                            style = MaterialTheme.typography.labelMedium,
+                            color = VylexPalette.Text500
+                        )
                     }
                 }
                 Spacer(Modifier.height(8.dp))

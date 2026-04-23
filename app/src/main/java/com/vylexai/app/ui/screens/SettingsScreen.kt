@@ -1,6 +1,5 @@
 package com.vylexai.app.ui.screens
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -62,9 +61,24 @@ fun SettingsScreen(onBack: () -> Unit) {
                     var battery by remember { mutableFloatStateOf(40f) }
                     var temp by remember { mutableFloatStateOf(40f) }
                     var cpu by remember { mutableFloatStateOf(70f) }
-                    SliderRow("Min battery", "${battery.roundToInt()}%", battery, 10f..100f) { battery = it }
-                    SliderRow("Max temperature", "${temp.roundToInt()}°C", temp, 30f..50f) { temp = it }
-                    SliderRow("CPU load ceiling", "${cpu.roundToInt()}%", cpu, 20f..100f) { cpu = it }
+                    SliderRow(
+                        "Min battery",
+                        "${battery.roundToInt()}%",
+                        battery,
+                        10f..100f
+                    ) { battery = it }
+                    SliderRow(
+                        "Max temperature",
+                        "${temp.roundToInt()}°C",
+                        temp,
+                        30f..50f
+                    ) { temp = it }
+                    SliderRow(
+                        "CPU load ceiling",
+                        "${cpu.roundToInt()}%",
+                        cpu,
+                        20f..100f
+                    ) { cpu = it }
                 }
             }
             Spacer(Modifier.height(16.dp))
@@ -117,7 +131,12 @@ private fun SliderRow(
 ) {
     Column(modifier = Modifier.padding(vertical = 6.dp)) {
         Row {
-            Text(label, style = MaterialTheme.typography.bodyMedium, color = VylexPalette.Text500, modifier = Modifier.weight(1f))
+            Text(
+                label,
+                style = MaterialTheme.typography.bodyMedium,
+                color = VylexPalette.Text500,
+                modifier = Modifier.weight(1f)
+            )
             Text(value, style = MaterialTheme.typography.bodyMedium, color = VylexPalette.Text100)
         }
         Slider(

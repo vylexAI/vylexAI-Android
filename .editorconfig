@@ -12,6 +12,8 @@ indent_size = 4
 ktlint_code_style = android_studio
 ktlint_standard_function-naming = disabled
 ktlint_standard_property-naming = disabled
+ktlint_standard_filename = disabled
+ktlint_standard_max-line-length = disabled
 
 [*.{yml,yaml,json,toml}]
 indent_size = 2

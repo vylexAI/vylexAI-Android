@@ -1,5 +1,6 @@
 package com.vylexai.app.ui.screens
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,7 +13,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.background
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -107,8 +107,11 @@ fun OnboardingScreen(onFinish: () -> Unit) {
         PrimaryButton(
             text = if (isLast) "Choose your mode" else "Next",
             onClick = {
-                if (isLast) onFinish()
-                else scope.launch { pagerState.animateScrollToPage(pagerState.currentPage + 1) }
+                if (isLast) {
+                    onFinish()
+                } else {
+                    scope.launch { pagerState.animateScrollToPage(pagerState.currentPage + 1) }
+                }
             }
         )
         Spacer(Modifier.height(12.dp))

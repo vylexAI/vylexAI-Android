@@ -46,9 +46,11 @@ private val LightColors = lightColorScheme(
     onSurface = VylexPalette.Ink900
 )
 
+// Dark-first product decision: ignore the system setting until a light-mode
+// pass is properly designed. Flip the `|| true` once that lands.
 @Composable
 fun VylexTheme(
-    darkTheme: Boolean = isSystemInDarkTheme() || true, // dark-first product decision
+    darkTheme: Boolean = isSystemInDarkTheme() || true,
     content: @Composable () -> Unit
 ) {
     val colorScheme = if (darkTheme) DarkColors else LightColors

@@ -99,8 +99,16 @@ fun WalletScreen(onBack: () -> Unit) {
                         )
                         Spacer(Modifier.width(12.dp))
                         Column(modifier = Modifier.weight(1f)) {
-                            Text(label, style = MaterialTheme.typography.bodyMedium, color = VylexPalette.Text100)
-                            Text("Today · confirmed", style = MaterialTheme.typography.labelSmall, color = VylexPalette.Text500)
+                            Text(
+                                label,
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = VylexPalette.Text100
+                            )
+                            Text(
+                                "Today · confirmed",
+                                style = MaterialTheme.typography.labelSmall,
+                                color = VylexPalette.Text500
+                            )
                         }
                         Text(
                             amount,
