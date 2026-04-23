@@ -1,5 +1,12 @@
 # vylexAI-Android
 
+[![CI](https://github.com/vylexAI/vylexAI-Android/actions/workflows/ci.yml/badge.svg)](https://github.com/vylexAI/vylexAI-Android/actions/workflows/ci.yml)
+[![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+[![Kotlin](https://img.shields.io/badge/Kotlin-2.0.21-7F52FF?logo=kotlin&logoColor=white)](https://kotlinlang.org)
+[![Compose](https://img.shields.io/badge/Compose-Material_3-4285F4?logo=jetpackcompose&logoColor=white)](https://developer.android.com/jetpack/compose)
+[![Min SDK](https://img.shields.io/badge/minSdk-26-3DDC84?logo=android&logoColor=white)](https://developer.android.com)
+[![Made in Germany](https://img.shields.io/badge/Made_in-Germany-000000?labelColor=DD0000&color=FFCE00)](#)
+
 > **VylexAI App — mobile-first MVP for Android devices.**
 > Official Android client for the VylexAI distributed / federated AI compute network.
 
