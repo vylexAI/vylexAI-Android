@@ -1,0 +1,116 @@
+name: Deploy Coordinator
+
+on:
+  push:
+    tags:
+      - "coordinator-v*"   # e.g. coordinator-v0.1.0
+  workflow_dispatch:
+    inputs:
+      image_tag:
+        description: "Docker image tag to deploy"
+        required: false
+        default: "latest"
+
+concurrency:
+  group: deploy-coordinator
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  packages: write
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE: ghcr.io/${{ github.repository_owner }}/vylexai-coordinator
+
+jobs:
+  build-and-push:
+    name: Build & push image to GHCR
+    runs-on: ubuntu-latest
+    outputs:
+      tag: ${{ steps.meta.outputs.tag }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Determine tag
+        id: meta
+        run: |
+          if [[ "${GITHUB_REF}" == refs/tags/coordinator-v* ]]; then
+            echo "tag=${GITHUB_REF#refs/tags/coordinator-v}" >> "$GITHUB_OUTPUT"
+          else
+            echo "tag=${{ github.event.inputs.image_tag }}" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build & push
+        uses: docker/build-push-action@v6
+        with:
+          context: ./backend
+          push: true
+          platforms: linux/amd64
+          tags: |
+            ${{ env.IMAGE }}:${{ steps.meta.outputs.tag }}
+            ${{ env.IMAGE }}:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  deploy:
+    name: Deploy to Hetzner
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    # Skip deploy when the required secrets aren't configured — lets the
+    # build step still validate on tag pushes without a live server.
+    if: >-
+      ${{ vars.DEPLOY_ENABLED == 'true' }}
+    environment:
+      name: production
+      url: https://api.vylexai.com
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Rsync compose + Caddy to host
+        uses: burnett01/rsync-deployments@7.0.1
+        with:
+          switches: -avz --delete
+          path: backend/
+          remote_path: /opt/vylex/coordinator/
+          remote_host: ${{ secrets.DEPLOY_HOST }}
+          remote_user: ${{ secrets.DEPLOY_USER }}
+          remote_key: ${{ secrets.DEPLOY_SSH_KEY }}
+
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USER }}
+          key: ${{ secrets.DEPLOY_SSH_KEY }}
+          script: |
+            set -euo pipefail
+            cd /opt/vylex/coordinator
+            export IMAGE_TAG="${{ needs.build-and-push.outputs.tag }}"
+            echo "$GHCR_TOKEN" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+            docker compose -f docker-compose.prod.yml pull
+            docker compose -f docker-compose.prod.yml --env-file /etc/vylex/coordinator.env up -d --remove-orphans
+            docker image prune -f
+          envs: GHCR_TOKEN
+        env:
+          GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Smoke check
+        run: |
+          for i in 1 2 3 4 5; do
+            if curl -fsS https://api.vylexai.com/health; then
+              exit 0
+            fi
+            sleep 10
+          done
+          exit 1

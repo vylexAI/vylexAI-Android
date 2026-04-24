@@ -1,0 +1,67 @@
+# Production compose — deployed to the Hetzner VM by .github/workflows/deploy.yml.
+#
+# Requires these env vars on the host (via /etc/vylex/coordinator.env):
+#   POSTGRES_PASSWORD, JWT_SECRET, PLAY_INTEGRITY_PROJECT_NUMBER
+#
+# Caddy listens on :80 (ACME challenge + redirect) and :443 (TLS), and
+# reverse-proxies api.vylexai.com to the app container.
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: vylex
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?required}
+      POSTGRES_DB: vylex
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U vylex"]
+      interval: 10s
+      timeout: 3s
+      retries: 10
+    networks: [vylex]
+
+  app:
+    image: ghcr.io/vylexai/vylexai-coordinator:${IMAGE_TAG:-latest}
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: "postgresql+asyncpg://vylex:${POSTGRES_PASSWORD:?required}@postgres:5432/vylex"
+      JWT_SECRET: ${JWT_SECRET:?required}
+      PLAY_INTEGRITY_PROJECT_NUMBER: ${PLAY_INTEGRITY_PROJECT_NUMBER:-}
+      PLAY_INTEGRITY_PACKAGE: com.vylexai.app
+      ENV: prod
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request,sys; sys.exit(0 if urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=3).status==200 else 1)"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+    networks: [vylex]
+
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    depends_on:
+      - app
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"   # HTTP/3
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    networks: [vylex]
+
+volumes:
+  pgdata:
+  caddy_data:
+  caddy_config:
+
+networks:
+  vylex:
