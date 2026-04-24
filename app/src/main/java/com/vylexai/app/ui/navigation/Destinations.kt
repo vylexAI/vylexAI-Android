@@ -3,6 +3,7 @@ package com.vylexai.app.ui.navigation
 object Routes {
     const val Splash = "splash"
     const val Onboarding = "onboarding"
+    const val Auth = "auth"
     const val ModeSelect = "mode_select"
     const val DeviceScan = "device_scan"
     const val ProviderDashboard = "provider_dashboard"

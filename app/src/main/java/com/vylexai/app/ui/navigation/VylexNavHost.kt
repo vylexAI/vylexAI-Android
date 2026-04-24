@@ -5,6 +5,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.vylexai.app.ui.screens.AuthScreen
 import com.vylexai.app.ui.screens.ClientDashboardScreen
 import com.vylexai.app.ui.screens.DeviceScanScreen
 import com.vylexai.app.ui.screens.DeviceStateScreen
@@ -29,10 +30,24 @@ fun VylexNavHost(navController: NavHostController = rememberNavController()) {
         }
         composable(Routes.Onboarding) {
             OnboardingScreen(onFinish = {
-                navController.navigate(Routes.ModeSelect) {
+                navController.navigate(Routes.Auth) {
                     popUpTo(Routes.Onboarding) { inclusive = true }
                 }
             })
+        }
+        composable(Routes.Auth) {
+            AuthScreen(
+                onAuthenticated = {
+                    navController.navigate(Routes.ModeSelect) {
+                        popUpTo(Routes.Auth) { inclusive = true }
+                    }
+                },
+                onSkipDemo = {
+                    navController.navigate(Routes.ModeSelect) {
+                        popUpTo(Routes.Auth) { inclusive = true }
+                    }
+                }
+            )
         }
         composable(Routes.ModeSelect) {
             ModeSelectScreen(onSelect = { mode ->
