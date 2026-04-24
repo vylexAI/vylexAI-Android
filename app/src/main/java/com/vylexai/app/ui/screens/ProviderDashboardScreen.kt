@@ -32,6 +32,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.vylexai.app.ui.components.GlassCard
 import com.vylexai.app.ui.components.MetricTile
 import com.vylexai.app.ui.components.SectionTitle
@@ -46,9 +48,11 @@ fun ProviderDashboardScreen(
     onOpenWorker: () -> Unit,
     onOpenWallet: () -> Unit,
     onOpenDevice: () -> Unit,
-    onOpenSettings: () -> Unit
+    onOpenSettings: () -> Unit,
+    viewModel: DashboardViewModel = hiltViewModel()
 ) {
     var active by remember { mutableStateOf(true) }
+    val dash by viewModel.state.collectAsStateWithLifecycle()
 
     Column(
         modifier = Modifier
@@ -116,13 +120,13 @@ fun ProviderDashboardScreen(
         Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
             MetricTile(
                 label = "BSAI earned (30d)",
-                value = "24.38",
+                value = formatBsaiAmount(dash.bsaiEarned),
                 accent = VylexPalette.Emerald400,
                 modifier = Modifier.weight(1f)
             )
             MetricTile(
                 label = "Tasks completed",
-                value = "1,284",
+                value = formatInt(dash.tasksCompleted),
                 modifier = Modifier.weight(1f)
             )
         }
@@ -130,7 +134,7 @@ fun ProviderDashboardScreen(
         Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
             MetricTile(
                 label = "Contribution score",
-                value = "97",
+                value = dash.contributionScore.toString(),
                 trailing = "/ 100",
                 modifier = Modifier.weight(1f)
             )
@@ -139,6 +143,14 @@ fun ProviderDashboardScreen(
                 value = "29°C",
                 accent = VylexPalette.Amber400,
                 modifier = Modifier.weight(1f)
+            )
+        }
+        if (dash.kind == DashboardKind.Demo) {
+            Spacer(Modifier.height(10.dp))
+            Text(
+                text = "Demo figures — sign in to see your real contribution.",
+                style = MaterialTheme.typography.labelSmall,
+                color = VylexPalette.Text500
             )
         }
 

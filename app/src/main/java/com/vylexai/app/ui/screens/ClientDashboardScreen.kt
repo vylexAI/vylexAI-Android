@@ -19,10 +19,13 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.vylexai.app.ui.components.GlassCard
 import com.vylexai.app.ui.components.MetricTile
 import com.vylexai.app.ui.components.PrimaryButton
@@ -45,8 +48,10 @@ private val mockJobs = listOf(
 fun ClientDashboardScreen(
     onNewTask: () -> Unit,
     onOpenWallet: () -> Unit,
-    onOpenSettings: () -> Unit
+    onOpenSettings: () -> Unit,
+    viewModel: DashboardViewModel = hiltViewModel()
 ) {
+    val dash by viewModel.state.collectAsStateWithLifecycle()
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -77,16 +82,25 @@ fun ClientDashboardScreen(
         Spacer(Modifier.height(20.dp))
         Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
             MetricTile(
-                label = "Active jobs",
-                value = "2",
+                label = "BSAI balance",
+                value = formatBsaiAmount(dash.balanceBsai),
+                accent = VylexPalette.Emerald400,
                 modifier = Modifier.weight(1f)
             )
             MetricTile(
                 label = "This month spend",
-                value = "8.14",
+                value = formatBsaiAmount(dash.bsaiSpent),
                 trailing = "BSAI",
                 accent = VylexPalette.Cyan300,
                 modifier = Modifier.weight(1f)
+            )
+        }
+        if (dash.kind == DashboardKind.Demo) {
+            Spacer(Modifier.height(10.dp))
+            Text(
+                text = "Demo figures — sign in to run real jobs.",
+                style = MaterialTheme.typography.labelSmall,
+                color = VylexPalette.Text500
             )
         }
         Spacer(Modifier.height(16.dp))
