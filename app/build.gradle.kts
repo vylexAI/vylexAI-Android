@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -10,6 +12,39 @@ plugins {
 
 kapt {
     correctErrorTypes = true
+}
+
+/**
+ * Release signing config.
+ *
+ * Resolution order:
+ *   1. CI: environment variables VYLEX_KEYSTORE_PATH / _PASSWORD / _KEY_ALIAS / _KEY_PASSWORD
+ *   2. Local: `keystore.properties` at the repo root (gitignored)
+ *   3. Nothing configured → release builds fall back to the debug signing key
+ *      with a visible warning. Lets CI + local dev still produce a release
+ *      AAB/APK for smoke tests; production uploads require a real key.
+ */
+val releaseSigning: (
+    com.android.build.api.dsl.SigningConfig
+) -> Boolean = fn@{ config ->
+    val envPath = System.getenv("VYLEX_KEYSTORE_PATH")
+    if (!envPath.isNullOrBlank()) {
+        config.storeFile = file(envPath)
+        config.storePassword = System.getenv("VYLEX_KEYSTORE_PASSWORD")
+        config.keyAlias = System.getenv("VYLEX_KEYSTORE_KEY_ALIAS")
+        config.keyPassword = System.getenv("VYLEX_KEYSTORE_KEY_PASSWORD")
+        return@fn true
+    }
+    val propsFile = rootProject.file("keystore.properties")
+    if (propsFile.exists()) {
+        val props = Properties().apply { propsFile.inputStream().use(::load) }
+        config.storeFile = file(props.getProperty("storeFile"))
+        config.storePassword = props.getProperty("storePassword")
+        config.keyAlias = props.getProperty("keyAlias")
+        config.keyPassword = props.getProperty("keyPassword")
+        return@fn true
+    }
+    false
 }
 
 android {
@@ -25,6 +60,18 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables { useSupportLibrary = true }
+    }
+
+    signingConfigs {
+        create("release") {
+            val configured = releaseSigning(this)
+            if (!configured) {
+                logger.warn(
+                    "VylexAI: release signing not configured — using debug key. " +
+                        "Set VYLEX_KEYSTORE_* env vars or add keystore.properties (see KEYSTORE.md)."
+                )
+            }
+        }
     }
 
     buildTypes {
@@ -44,7 +91,18 @@ android {
             )
             // Replaced once Stage 2.9 deploys the coordinator behind a TLS domain.
             buildConfigField("String", "COORDINATOR_BASE_URL", "\"https://api.vylexai.com/\"")
+            // Attach the release signing if it's configured; fall back to debug otherwise
+            // so `./gradlew bundleRelease` always succeeds in CI without secrets.
+            signingConfig = signingConfigs.findByName("release")
+                ?.takeIf { it.storeFile != null }
+                ?: signingConfigs.getByName("debug")
         }
+    }
+
+    bundle {
+        language { enableSplit = true }
+        density { enableSplit = true }
+        abi { enableSplit = true }
     }
 
     compileOptions {

@@ -17,3 +17,13 @@
 -keepclasseswithmembers class com.vylexai.app.data.** {
     kotlinx.serialization.KSerializer serializer(...);
 }
+
+# Transitive annotations referenced by Tink, TFLite support, and other libs
+# but not actually shipped at runtime. Safe to strip warnings.
+-dontwarn com.google.errorprone.annotations.**
+-dontwarn com.google.auto.value.**
+-dontwarn javax.annotation.**
+
+# TensorFlow Lite — keep the native interface surface.
+-keep class org.tensorflow.lite.** { *; }
+-keep class org.tensorflow.lite.support.** { *; }
