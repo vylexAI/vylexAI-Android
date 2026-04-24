@@ -29,6 +29,7 @@ complexity:
     constructorThreshold: 8
   TooManyFunctions:
     thresholdInClasses: 20
+    thresholdInInterfaces: 20
   LongMethod:
     # @Composable screens are inherently long — they wire layout + state in one
     # function, which is the idiomatic Compose style.

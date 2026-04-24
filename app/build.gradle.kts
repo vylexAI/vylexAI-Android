@@ -32,6 +32,8 @@ android {
             applicationIdSuffix = ".debug"
             versionNameSuffix = "-debug"
             isDebuggable = true
+            // 10.0.2.2 = the host machine from the Android emulator's POV.
+            buildConfigField("String", "COORDINATOR_BASE_URL", "\"http://10.0.2.2:8000/\"")
         }
         release {
             isMinifyEnabled = true
@@ -40,6 +42,8 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            // Replaced once Stage 2.9 deploys the coordinator behind a TLS domain.
+            buildConfigField("String", "COORDINATOR_BASE_URL", "\"https://api.vylexai.com/\"")
         }
     }
 
@@ -135,4 +139,7 @@ dependencies {
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
     androidTestImplementation(libs.mockk.android)
+
+    // Test — network
+    testImplementation(libs.okhttp.mockwebserver)
 }
