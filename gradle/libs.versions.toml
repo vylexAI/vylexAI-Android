@@ -13,6 +13,7 @@ datastore = "1.1.1"
 work = "2.10.0"
 security-crypto = "1.1.0-alpha06"
 biometric = "1.2.0-alpha05"
+play-integrity = "1.4.0"
 
 # Compose
 compose-bom = "2024.12.01"
@@ -61,6 +62,7 @@ androidx-datastore-preferences = { module = "androidx.datastore:datastore-prefer
 androidx-work-runtime-ktx = { module = "androidx.work:work-runtime-ktx", version.ref = "work" }
 androidx-security-crypto = { module = "androidx.security:security-crypto", version.ref = "security-crypto" }
 androidx-biometric = { module = "androidx.biometric:biometric", version.ref = "biometric" }
+play-integrity = { module = "com.google.android.play:integrity", version.ref = "play-integrity" }
 
 # Compose
 androidx-compose-bom = { module = "androidx.compose:compose-bom", version.ref = "compose-bom" }

@@ -13,6 +13,7 @@ import com.vylexai.app.R
 import com.vylexai.app.data.auth.AuthTokenStore
 import com.vylexai.app.data.heartbeat.HeartbeatRepository
 import com.vylexai.app.data.inference.SampleGallery
+import com.vylexai.app.data.integrity.PlayIntegrityTokenProvider
 import com.vylexai.app.data.net.VylexException
 import com.vylexai.app.data.tasks.TaskRepository
 import com.vylexai.app.domain.inference.InferenceEngine
@@ -42,7 +43,8 @@ class VylexProviderWorker @AssistedInject constructor(
     private val tasks: TaskRepository,
     private val heartbeat: HeartbeatRepository,
     private val deviceIds: DeviceIdProvider,
-    private val store: WorkerStore
+    private val store: WorkerStore,
+    private val integrity: PlayIntegrityTokenProvider
 ) : CoroutineWorker(appContext, params) {
 
     override suspend fun getForegroundInfo(): ForegroundInfo = buildForegroundInfo(0)
@@ -64,6 +66,7 @@ class VylexProviderWorker @AssistedInject constructor(
 
                 if (authenticated) {
                     runCatching {
+                        val integrityToken = integrity.tokenOrNull(requestHash = "$deviceId:$hash")
                         val next = tasks.nextTask(deviceId)
                         if (next != null) {
                             tasks.submitResult(
@@ -71,7 +74,7 @@ class VylexProviderWorker @AssistedInject constructor(
                                 outputRef = null,
                                 resultHash = hash,
                                 execTimeMs = result.latencyMs,
-                                integrityToken = null
+                                integrityToken = integrityToken
                             )
                         }
                         heartbeat.send(
@@ -80,7 +83,7 @@ class VylexProviderWorker @AssistedInject constructor(
                             tempC = null,
                             isCharging = true,
                             networkType = "wifi",
-                            integrityToken = null
+                            integrityToken = integrityToken
                         )
                     }.onFailure { t ->
                         if (t !is VylexException) store.recordError(t.message ?: "unknown")
