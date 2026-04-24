@@ -22,7 +22,7 @@ hilt = "2.52"
 hilt-navigation-compose = "1.2.0"
 
 # Network
-retrofit = "2.11.0"
+retrofit = "3.0.0"
 okhttp = "4.12.0"
 kotlinx-serialization = "1.7.3"
 retrofit-serialization = "1.0.0"
