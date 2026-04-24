@@ -24,9 +24,6 @@ import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -49,9 +46,11 @@ fun ProviderDashboardScreen(
     onOpenWallet: () -> Unit,
     onOpenDevice: () -> Unit,
     onOpenSettings: () -> Unit,
-    viewModel: DashboardViewModel = hiltViewModel()
+    viewModel: DashboardViewModel = hiltViewModel(),
+    workerViewModel: ProviderWorkerViewModel = hiltViewModel()
 ) {
-    var active by remember { mutableStateOf(true) }
+    val worker by workerViewModel.state.collectAsStateWithLifecycle()
+    val active = worker.enabled
     val dash by viewModel.state.collectAsStateWithLifecycle()
 
     Column(
@@ -93,7 +92,7 @@ fun ProviderDashboardScreen(
                     Spacer(Modifier.weight(1f))
                     Switch(
                         checked = active,
-                        onCheckedChange = { active = it },
+                        onCheckedChange = workerViewModel::setActive,
                         colors = SwitchDefaults.colors(
                             checkedTrackColor = VylexPalette.Cyan400,
                             checkedThumbColor = VylexPalette.Ink900,
@@ -103,12 +102,21 @@ fun ProviderDashboardScreen(
                 }
                 Spacer(Modifier.height(16.dp))
                 Text(
-                    text = "Your node is serving the network.",
+                    text = if (active) {
+                        "Your node is serving the network."
+                    } else {
+                        "Node paused — flip the switch to start contributing."
+                    },
                     style = MaterialTheme.typography.titleMedium,
                     color = VylexPalette.Text100
                 )
                 Text(
-                    text = "Tasks run only while charging on Wi-Fi with a safe temperature.",
+                    text = if (active && worker.tasksCompletedToday > 0) {
+                        "Today · ${worker.tasksCompletedToday} tasks · " +
+                            "${"%.3f".format(worker.bsaiEarnedToday)} BSAI"
+                    } else {
+                        "Tasks run only while charging on Wi-Fi with a safe temperature."
+                    },
                     style = MaterialTheme.typography.bodySmall,
                     color = VylexPalette.Text500,
                     modifier = Modifier.padding(top = 4.dp)

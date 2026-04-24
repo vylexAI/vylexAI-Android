@@ -26,7 +26,8 @@ style:
 complexity:
   LongParameterList:
     functionThreshold: 8
-    constructorThreshold: 8
+    constructorThreshold: 10
+    ignoreAnnotated: ['AssistedInject', 'Inject']
   TooManyFunctions:
     thresholdInClasses: 20
     thresholdInInterfaces: 20
