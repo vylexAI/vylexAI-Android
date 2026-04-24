@@ -81,6 +81,13 @@ android {
             isDebuggable = true
             // 10.0.2.2 = the host machine from the Android emulator's POV.
             buildConfigField("String", "COORDINATOR_BASE_URL", "\"http://10.0.2.2:8000/\"")
+            // Play Integrity cloud project number (Google Cloud). 0 = unconfigured →
+            // PlayIntegrityTokenProvider short-circuits to null. Override via CI.
+            buildConfigField(
+                "long",
+                "PLAY_INTEGRITY_CLOUD_PROJECT",
+                (System.getenv("VYLEX_PLAY_INTEGRITY_PROJECT") ?: "0") + "L"
+            )
         }
         release {
             isMinifyEnabled = true
@@ -91,6 +98,11 @@ android {
             )
             // Replaced once Stage 2.9 deploys the coordinator behind a TLS domain.
             buildConfigField("String", "COORDINATOR_BASE_URL", "\"https://api.vylexai.com/\"")
+            buildConfigField(
+                "long",
+                "PLAY_INTEGRITY_CLOUD_PROJECT",
+                (System.getenv("VYLEX_PLAY_INTEGRITY_PROJECT") ?: "0") + "L"
+            )
             // Attach the release signing if it's configured; fall back to debug otherwise
             // so `./gradlew bundleRelease` always succeeds in CI without secrets.
             signingConfig = signingConfigs.findByName("release")
@@ -142,6 +154,7 @@ dependencies {
     implementation(libs.androidx.datastore.preferences)
     implementation(libs.androidx.security.crypto)
     implementation(libs.androidx.biometric)
+    implementation(libs.play.integrity)
 
     // Compose
     implementation(platform(libs.androidx.compose.bom))

@@ -27,3 +27,7 @@
 # TensorFlow Lite — keep the native interface surface.
 -keep class org.tensorflow.lite.** { *; }
 -keep class org.tensorflow.lite.support.** { *; }
+
+# Play Integrity — keep SDK surface.
+-keep class com.google.android.play.core.integrity.** { *; }
+-dontwarn com.google.android.play.core.integrity.**
