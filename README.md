@@ -122,7 +122,7 @@ we release via tags.
 
 ## Core team — built in Germany
 
-Engineering across **Berlin**, **Cottbus**, and **Frankfurt**, inside the
+Engineering across **Cottbus**, **Berlin**, and **Frankfurt**, inside the
 framework of the EU AI Act. Supported by **Startup Lausitz** (consulting)
 and the **Brandenburgische Technische Universität Cottbus-Senftenberg**.
 
@@ -132,7 +132,7 @@ and the **Brandenburgische Technische Universität Cottbus-Senftenberg**.
 - **Riyabrata Mondal** — Lead Full-Stack & Platform Engineer
 - **Vishva Hirenkumar Jani** — AI Infrastructure & Backend Engineer
 
-Company: **Dudaev Systems UG**, Berlin, Germany.
+Company: **Dudaev Systems UG**, Cottbus, Germany.
 
 ---
 
@@ -190,4 +190,4 @@ uv run fastapi dev app/main.py          # → http://localhost:8000/docs
 ## License
 
 Apache 2.0 — see [`LICENSE`](LICENSE).
-Copyright © 2026 **Dudaev Systems UG**, Berlin, Germany.
+Copyright © 2026 **Dudaev Systems UG**, Cottbus, Germany.
