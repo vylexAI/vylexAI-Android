@@ -3,14 +3,14 @@ from decimal import Decimal
 from fastapi import APIRouter, HTTPException
 from sqlalchemy import select
 
+from app.core.config import settings
 from app.deps import CurrentUser, DbSession
 from app.models import Job, LedgerEntry, Task
 from app.schemas import JobCreateIn, JobOut
 
 router = APIRouter(prefix="/jobs", tags=["jobs"])
 
-# Simple MVP pricing. Real pricing = dynamic on-chain.
-BASE_UNIT_COST_BSAI = Decimal("0.002")
+BASE_UNIT_COST_BSAI = settings.bsai_base_unit_cost
 
 
 async def _user_balance(db, user_id) -> Decimal:
