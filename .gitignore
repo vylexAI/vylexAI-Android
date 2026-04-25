@@ -27,7 +27,13 @@ captures/
 keystore.properties
 *.jks
 *.keystore
+keystores/
+*.password.txt
 release/
+
+# Internal collaboration material — not shipped publicly
+docs/team/
+docs/screenshots/raw/
 
 # Logs
 *.log

@@ -122,9 +122,9 @@ we release via tags.
 
 ## Core team — built in Germany
 
-Engineering out of **Cottbus** and **Frankfurt**, inside the framework of the
-EU AI Act. Supported by **Startup Lausitz** (consulting) and the
-**Brandenburgische Technische Universität Cottbus-Senftenberg**.
+Engineering across **Berlin**, **Cottbus**, and **Frankfurt**, inside the
+framework of the EU AI Act. Supported by **Startup Lausitz** (consulting)
+and the **Brandenburgische Technische Universität Cottbus-Senftenberg**.
 
 - **Adlan Dudaev** — Founder · Chief Technology Architect
 - **Ananya Sai Tippani** — AI & Machine Learning Engineer
@@ -132,7 +132,7 @@ EU AI Act. Supported by **Startup Lausitz** (consulting) and the
 - **Riyabrata Mondal** — Lead Full-Stack & Platform Engineer
 - **Vishva Hirenkumar Jani** — AI Infrastructure & Backend Engineer
 
-Company: **Dudaev Systems UG**, Cottbus, Germany.
+Company: **Dudaev Systems UG**, Berlin, Germany.
 
 ---
 
@@ -190,4 +190,4 @@ uv run fastapi dev app/main.py          # → http://localhost:8000/docs
 ## License
 
 Apache 2.0 — see [`LICENSE`](LICENSE).
-Copyright © 2026 **Dudaev Systems UG**, Cottbus, Germany.
+Copyright © 2026 **Dudaev Systems UG**, Berlin, Germany.
