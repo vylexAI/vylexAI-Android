@@ -13,8 +13,10 @@ that builds the image to GHCR and SSH-deploys on tag push.
 
 ### 1. Hetzner VM
 
-- **Size:** CX22 (€4.51/mo, 2 vCPU, 4 GB RAM, 40 GB SSD) is plenty for
-  the preview and well into the hundreds of concurrent nodes.
+- **Size:** CX23 (€4.75/mo, 2 vCPU, 4 GB RAM, 40 GB SSD) is plenty for
+  the preview and well into the hundreds of concurrent nodes. CX22 was
+  retired by Hetzner in early 2026; CX23 is the cost-optimized
+  equivalent on slightly newer hardware.
 - **Location:** Nuremberg (Germany) — keeps the data in the EU, matches
   Dudaev Systems UG's jurisdiction, helps with the GDPR story.
 - **Image:** Ubuntu 24.04 LTS.
