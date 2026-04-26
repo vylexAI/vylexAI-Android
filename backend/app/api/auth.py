@@ -2,6 +2,7 @@ from fastapi import APIRouter, HTTPException, status
 from sqlalchemy import select
 
 from app.core.config import settings
+from app.core.email import send_welcome
 from app.core.security import create_access_token, hash_password, verify_password
 from app.deps import DbSession
 from app.models import User
@@ -19,6 +20,7 @@ async def register(body: RegisterIn, db: DbSession) -> TokenOut:
     db.add(user)
     await db.commit()
     await db.refresh(user)
+    send_welcome(user.email)
     token = create_access_token(str(user.id))
     return TokenOut(access_token=token, expires_in=settings.jwt_expires_minutes * 60)
 

@@ -5,6 +5,11 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.api import auth, devices, heartbeat, jobs, tasks, wallet_stats
 from app.core.config import settings
+from app.core.observability import init_sentry
+
+# Sentry init must run before FastAPI is constructed so its middleware
+# can hook the ASGI cycle. No-op when settings.sentry_dsn is unset.
+init_sentry()
 
 
 @asynccontextmanager

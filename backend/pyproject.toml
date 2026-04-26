@@ -19,6 +19,7 @@ dependencies = [
     "google-auth>=2.36.0",
     "greenlet>=3.0.0",
     "psycopg2-binary>=2.9",
+    "sentry-sdk[fastapi,sqlalchemy]>=2.20.0",
 ]
 
 [project.optional-dependencies]
