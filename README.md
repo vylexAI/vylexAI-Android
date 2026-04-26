@@ -5,9 +5,9 @@
 <h1 align="center">VylexAI</h1>
 
 <p align="center">
-  <strong>Decentralized AI, powered by every smartphone.</strong><br/>
-  A new layer of internet infrastructure that turns any device — phone, laptop, GPU node —<br/>
-  into part of a global, verifiable AI compute network.
+  <strong>Decentralized AI Compute Network Powered by Global Devices.</strong><br/>
+  Turn any smartphone, laptop, or PC into a verifiable node of a global AI compute and storage layer.<br/>
+  <em>If you believe in decentralized AI, star this repo. ⭐</em>
 </p>
 
 <p align="center">
