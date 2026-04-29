@@ -64,4 +64,8 @@ volumes:
   caddy_config:
 
 networks:
+  # Explicitly named so the website's separate compose stack can join
+  # this network via `external: true` and have Caddy reach it as
+  # `website:3000` from the same DNS scope as `app:8000`.
   vylex:
+    name: vylex

@@ -3,11 +3,11 @@
     email hello@vylexai.com
 }
 
+# ─── Coordinator API ─────────────────────────────────────────────────────────
+# Android client + dashboard read this.
 api.vylexai.com {
     encode zstd gzip
 
-    # Hide framework fingerprinting; keep CORS here at the edge so the
-    # Android app's same-origin-style behavior stays tight.
     header {
         -Server
         -X-Powered-By
@@ -17,6 +17,33 @@ api.vylexai.com {
     }
 
     reverse_proxy app:8000 {
+        header_up Host {host}
+        header_up X-Real-IP {remote}
+        header_up X-Forwarded-For {remote}
+        header_up X-Forwarded-Proto {scheme}
+    }
+}
+
+# ─── Public website + private founder dashboard ──────────────────────────────
+# Next.js standalone container named `website`, joined to this Docker
+# network from the website's separate compose stack
+# (see github.com/vylexAI/website → docker-compose.prod.yml).
+vylexai.com, www.vylexai.com {
+    encode zstd gzip
+
+    header {
+        -Server
+        -X-Powered-By
+        Strict-Transport-Security "max-age=31536000; includeSubDomains"
+        X-Content-Type-Options "nosniff"
+        Referrer-Policy "no-referrer"
+    }
+
+    # Redirect www → apex so cookies + analytics live in one origin.
+    @www host www.vylexai.com
+    redir @www https://vylexai.com{uri} permanent
+
+    reverse_proxy website:3000 {
         header_up Host {host}
         header_up X-Real-IP {remote}
         header_up X-Forwarded-For {remote}
