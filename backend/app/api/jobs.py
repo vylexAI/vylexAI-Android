@@ -4,7 +4,7 @@ from fastapi import APIRouter, HTTPException
 from sqlalchemy import select
 
 from app.core.config import settings
-from app.core.shahada import issuance_note
+from app.core.genesis import issuance_note
 from app.deps import CurrentUser, DbSession
 from app.models import Job, LedgerEntry, Task
 from app.schemas import JobCreateIn, JobOut

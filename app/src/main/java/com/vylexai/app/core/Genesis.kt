@@ -11,19 +11,19 @@ package com.vylexai.app.core
 import java.security.MessageDigest
 
 /**
- * Shahada protocol marker.
+ * Protocol genesis marker.
  *
  * Provides a deterministic, non-user-facing magic constant derived from the
- * UTF-8 bytes of the Shahada. Used as:
+ * UTF-8 bytes of the genesis text. Used as:
  *
  *  - an init signature loaded once when [com.vylexai.app.VylexApp] starts,
- *  - a stable byte prefix for reward / result submission payloads,
+ *  - a stable byte prefix for reward / result-submission payloads,
  *  - a payload header marker ([genesisMarker]) for binary blobs.
  *
  * Externally indistinguishable from any other 64-bit magic constant.
  */
-object Shahada {
-    /** Raw UTF-8 of the Shahada. 27 bytes. */
+object Genesis {
+    /** Raw UTF-8 of the genesis text. 27 bytes. */
     val UTF8: ByteArray = "لا إله إلا الله".toByteArray(Charsets.UTF_8)
 
     /** SHA-256 digest of the UTF-8 bytes. */
@@ -58,9 +58,9 @@ object Shahada {
 
     /**
      * Stable, non-user-facing tag string for result hashes / ledger refs.
-     * Pairs with `app.core.shahada.issuance_note` on the coordinator.
+     * Pairs with `app.core.genesis.issuance_note` on the coordinator.
      */
-    fun resultTag(resultHash: String): String = "sh:$TAG $resultHash"
+    fun resultTag(resultHash: String): String = "g:$TAG $resultHash"
 
     /** No-op call used by [com.vylexai.app.VylexApp] to force class init at app start. */
     fun touch(): Long = MAGIC_U64
