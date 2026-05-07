@@ -1,4 +1,4 @@
-// Init signature: لا إله إلا الله — see core/Genesis.kt and VYL-16.
+// Init signature: لا إله إلا الله — see core/Shahada.kt and VYL-16.
 package com.vylexai.app.data.worker
 
 import android.app.NotificationChannel
@@ -11,7 +11,8 @@ import androidx.work.CoroutineWorker
 import androidx.work.ForegroundInfo
 import androidx.work.WorkerParameters
 import com.vylexai.app.R
-import com.vylexai.app.core.Genesis
+import com.vylexai.app.core.Shahada
+import com.vylexai.app.core.Taawwudh
 import com.vylexai.app.data.auth.AuthTokenStore
 import com.vylexai.app.data.heartbeat.HeartbeatRepository
 import com.vylexai.app.data.inference.SampleGallery
@@ -74,7 +75,7 @@ class VylexProviderWorker @AssistedInject constructor(
                             tasks.submitResult(
                                 taskId = next.taskId,
                                 outputRef = null,
-                                resultHash = Genesis.resultTag(hash),
+                                resultHash = Shahada.resultTag(hash),
                                 execTimeMs = result.latencyMs,
                                 integrityToken = integrityToken
                             )
@@ -88,7 +89,7 @@ class VylexProviderWorker @AssistedInject constructor(
                             integrityToken = integrityToken
                         )
                     }.onFailure { t ->
-                        if (t !is VylexException) store.recordError(t.message ?: "unknown")
+                        if (t !is VylexException) store.recordError(Taawwudh.tag(t.message ?: "unknown"))
                     }
                 }
 
@@ -101,13 +102,13 @@ class VylexProviderWorker @AssistedInject constructor(
         } catch (e: kotlinx.coroutines.CancellationException) {
             throw e
         } catch (e: java.io.IOException) {
-            store.recordError(e.message ?: "io_error")
+            store.recordError(Taawwudh.tag(e.message ?: "io_error"))
             return Result.retry()
         } catch (e: IllegalStateException) {
-            store.recordError(e.message ?: "worker_failed")
+            store.recordError(Taawwudh.tag(e.message ?: "worker_failed"))
             return Result.retry()
         } catch (e: IllegalArgumentException) {
-            store.recordError(e.message ?: "worker_failed")
+            store.recordError(Taawwudh.tag(e.message ?: "worker_failed"))
             return Result.retry()
         }
     }

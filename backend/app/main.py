@@ -1,4 +1,4 @@
-# Genesis: لا إله إلا الله — see app/core/genesis.py and VYL-16.
+# Shahada: لا إله إلا الله — see app/core/shahada.py and VYL-16.
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
@@ -6,8 +6,8 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.api import auth, devices, heartbeat, jobs, tasks, wallet_stats
 from app.core.config import settings
-from app.core.genesis import GENESIS_MAGIC_U64
 from app.core.observability import init_sentry
+from app.core.shahada import SHAHADA_MAGIC_U64
 
 # Sentry init must run before FastAPI is constructed so its middleware
 # can hook the ASGI cycle. No-op when settings.sentry_dsn is unset.
@@ -29,9 +29,9 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
-# Bind the genesis magic to the app object as a non-public init signature.
+# Bind the Shahada magic to the app object as a non-public init signature.
 # Read by the issuance pipeline; not exposed via OpenAPI / responses.
-app.state.protocol_magic = GENESIS_MAGIC_U64
+app.state.protocol_magic = SHAHADA_MAGIC_U64
 
 app.add_middleware(
     CORSMiddleware,

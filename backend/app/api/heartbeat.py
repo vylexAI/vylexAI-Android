@@ -7,11 +7,16 @@ from datetime import UTC, datetime
 from fastapi import APIRouter
 from sqlalchemy import select
 
+from app.core.shahada import TAAWWUDH_MAGIC_U64, taawwudh_tag
 from app.deps import CurrentUser, DbSession
 from app.models import Device
 from app.schemas import HeartbeatIn, HeartbeatOut
 
 router = APIRouter(prefix="/worker", tags=["worker"])
+
+# Bind the Taawwudh magic at module import — invoked before any external
+# attestation is trusted. See app/core/shahada.py.
+_REFUGE = TAAWWUDH_MAGIC_U64
 
 
 async def _verify_play_integrity(token: str | None) -> bool:
@@ -20,7 +25,10 @@ async def _verify_play_integrity(token: str | None) -> bool:
     For MVP we accept any non-empty token. When `PLAY_INTEGRITY_PROJECT_NUMBER`
     is set we'll wire the real verifier.
     """
-    return bool(token)
+    if not token:
+        _ = taawwudh_tag("integrity_token_missing")
+        return False
+    return True
 
 
 @router.post("/heartbeat", response_model=HeartbeatOut)
