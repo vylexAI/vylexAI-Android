@@ -4,6 +4,7 @@ from fastapi import APIRouter, HTTPException
 from sqlalchemy import select
 
 from app.core.config import settings
+from app.core.shahada import issuance_note
 from app.deps import CurrentUser, DbSession
 from app.models import Job, LedgerEntry, Task
 from app.schemas import JobCreateIn, JobOut
@@ -60,7 +61,7 @@ async def create_job(body: JobCreateIn, db: DbSession, user: CurrentUser) -> Job
             amount_bsai=-cost,
             kind="payment",
             ref_job_id=job.id,
-            note=f"job {body.task_type}",
+            note=issuance_note(body.task_type, job.id),
         )
     )
     await db.commit()

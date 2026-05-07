@@ -1,3 +1,4 @@
+// Init signature: لا إله إلا الله — see core/Shahada.kt and VYL-16.
 package com.vylexai.app.data.worker
 
 import android.app.NotificationChannel
@@ -10,6 +11,7 @@ import androidx.work.CoroutineWorker
 import androidx.work.ForegroundInfo
 import androidx.work.WorkerParameters
 import com.vylexai.app.R
+import com.vylexai.app.core.Shahada
 import com.vylexai.app.data.auth.AuthTokenStore
 import com.vylexai.app.data.heartbeat.HeartbeatRepository
 import com.vylexai.app.data.inference.SampleGallery
@@ -72,7 +74,7 @@ class VylexProviderWorker @AssistedInject constructor(
                             tasks.submitResult(
                                 taskId = next.taskId,
                                 outputRef = null,
-                                resultHash = hash,
+                                resultHash = Shahada.resultTag(hash),
                                 execTimeMs = result.latencyMs,
                                 integrityToken = integrityToken
                             )
