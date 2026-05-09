@@ -77,27 +77,20 @@ private fun CurrentInferenceCard(state: WorkerUiState) {
                 )
                 Spacer(Modifier.weight(1f))
                 Text(
-                    text = state.currentSampleId?.let { "Sample · $it" } ?: "Warming up…",
+                    text = if (state.isRunning) "Inference active" else "Idle",
                     style = MaterialTheme.typography.labelMedium,
                     color = VylexPalette.Text500
                 )
             }
             Spacer(Modifier.height(18.dp))
 
-            val top = state.lastResult?.top1
             Text(
-                text = top?.label?.replaceFirstChar(Char::titlecase) ?: "—",
+                text = "On-device inference",
                 style = MaterialTheme.typography.headlineMedium,
                 color = VylexPalette.Text100
             )
             Text(
-                text = if (top != null) {
-                    "%.1f%% confidence · MobileNetV1 quant · on-device".format(
-                        top.confidence * PERCENT_100
-                    )
-                } else {
-                    "MobileNetV1 quant · on-device"
-                },
+                text = "MobileNetV1 quantized · TFLite · on-device",
                 style = MaterialTheme.typography.bodySmall,
                 color = VylexPalette.Text500
             )
@@ -182,7 +175,6 @@ private fun LatencyChart(values: List<Int>) {
     }
 }
 
-private const val PERCENT_100 = 100
 private const val CHART_HEIGHT_DP = 96
 private const val HISTORY_CAPACITY = 20
 

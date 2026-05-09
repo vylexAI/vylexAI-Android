@@ -44,3 +44,6 @@ node_modules/
 .env.*
 !.env.example
 _secrets_local/
+
+# Local backup of old sample assets (git history is the canonical store)
+app/src/main/assets/samples_backup_*/

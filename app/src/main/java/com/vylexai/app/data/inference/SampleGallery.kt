@@ -13,11 +13,11 @@ class SampleGallery @Inject constructor(
     @ApplicationContext private val context: Context
 ) {
     val samples: List<Sample> = listOf(
-        Sample("laptop", "samples/laptop.jpg"),
-        Sample("keyboard", "samples/keyboard.jpg"),
-        Sample("monitor", "samples/monitor.jpg"),
-        Sample("chip", "samples/chip.jpg"),
-        Sample("hard disc", "samples/hard_disc.jpg")
+        Sample("retriever", "samples/retriever.jpg"),
+        Sample("espresso", "samples/espresso.jpg"),
+        Sample("pizza", "samples/pizza.jpg"),
+        Sample("sunflower", "samples/sunflower.jpg"),
+        Sample("tabby", "samples/tabby.jpg")
     )
 
     fun bitmapFor(sample: Sample): Bitmap =
