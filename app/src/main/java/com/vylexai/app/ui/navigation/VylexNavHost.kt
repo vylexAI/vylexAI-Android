@@ -8,7 +8,6 @@ import androidx.navigation.compose.rememberNavController
 import com.vylexai.app.ui.screens.AuthScreen
 import com.vylexai.app.ui.screens.ClientDashboardScreen
 import com.vylexai.app.ui.screens.DeviceScanScreen
-import com.vylexai.app.ui.screens.DeviceStateScreen
 import com.vylexai.app.ui.screens.ModeSelectScreen
 import com.vylexai.app.ui.screens.OnboardingScreen
 import com.vylexai.app.ui.screens.ProviderDashboardScreen
@@ -93,7 +92,10 @@ fun VylexNavHost(navController: NavHostController = rememberNavController()) {
             SettingsScreen(onBack = { navController.popBackStack() })
         }
         composable(Routes.DeviceState) {
-            DeviceStateScreen(onBack = { navController.popBackStack() })
+            // Reuse the real-data DeviceScanScreen here (it pulls live values
+            // from AndroidDeviceScanner). DeviceStateScreen with hardcoded
+            // mock specs is intentionally not wired into navigation anymore.
+            DeviceScanScreen(onDone = { navController.popBackStack() })
         }
     }
 }

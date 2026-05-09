@@ -21,6 +21,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.vylexai.app.ui.theme.VylexPalette
 
@@ -37,7 +38,9 @@ fun MetricTile(
             Text(
                 text = label.uppercase(),
                 style = MaterialTheme.typography.labelSmall,
-                color = VylexPalette.Text500
+                color = VylexPalette.Text500,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
             )
             Spacer(Modifier.height(10.dp))
             Row(verticalAlignment = Alignment.Bottom) {
@@ -46,7 +49,10 @@ fun MetricTile(
                     style = MaterialTheme.typography.headlineMedium.copy(
                         fontWeight = FontWeight.SemiBold
                     ),
-                    color = accent
+                    color = accent,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.weight(1f, fill = false)
                 )
                 trailing?.let {
                     Spacer(Modifier.width(6.dp))
@@ -54,6 +60,8 @@ fun MetricTile(
                         text = it,
                         style = MaterialTheme.typography.labelMedium,
                         color = VylexPalette.Text300,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
                         modifier = Modifier.padding(bottom = 4.dp)
                     )
                 }

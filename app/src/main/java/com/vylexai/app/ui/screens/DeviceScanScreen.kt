@@ -154,7 +154,9 @@ private fun ReportState(report: DeviceReport, onDone: () -> Unit) {
                 buildString {
                     append(report.cpu.model ?: "—")
                     append(" · ${report.cpu.cores} cores")
-                    report.cpu.maxFrequencyMhz?.let { append(" · ${it / 1000f} GHz") }
+                    report.cpu.maxFrequencyMhz?.let {
+                        append(" · %.2f GHz".format(it / 1000f))
+                    }
                 }
             )
             SpecRow("GPU", report.gpu ?: "—")
@@ -196,10 +198,25 @@ private fun SpecRow(label: String, value: String, last: Boolean = false) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 10.dp),
-        horizontalArrangement = Arrangement.SpaceBetween
+        horizontalArrangement = Arrangement.spacedBy(12.dp),
+        verticalAlignment = Alignment.Top
     ) {
-        Text(label, style = MaterialTheme.typography.bodyMedium, color = VylexPalette.Text500)
-        Text(value, style = MaterialTheme.typography.bodyMedium, color = VylexPalette.Text100)
+        Text(
+            text = label,
+            style = MaterialTheme.typography.bodyMedium,
+            color = VylexPalette.Text500,
+            maxLines = 1,
+            overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis
+        )
+        Text(
+            text = value,
+            style = MaterialTheme.typography.bodyMedium,
+            color = VylexPalette.Text100,
+            textAlign = androidx.compose.ui.text.style.TextAlign.End,
+            maxLines = 2,
+            overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis,
+            modifier = Modifier.weight(1f)
+        )
     }
     if (!last) Box(modifier = Modifier.fillMaxWidth().height(1.dp))
 }

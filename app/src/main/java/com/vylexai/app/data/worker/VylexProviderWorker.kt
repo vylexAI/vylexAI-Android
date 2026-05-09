@@ -62,20 +62,45 @@ class VylexProviderWorker @AssistedInject constructor(
         try {
             val samples = gallery.samples
             while (completed < MAX_TASKS_PER_INVOCATION) {
-                val sample = samples[completed % samples.size]
+                // 1. Pull a server-dispatched task first (best-effort).
+                //    On network/auth failure we fall through to local-only inference
+                //    so the local UI still shows meaningful telemetry.
+                val serverTask = if (authenticated) {
+                    runCatching { tasks.nextTask(deviceId) }.getOrNull()
+                } else {
+                    null
+                }
+
+                // 2. Resolve the input. Server tasks carry `input_ref = "local:<id>"`
+                //    pointing into our bundled gallery — same input across all devices
+                //    means deterministic hashes and real quorum on the coordinator.
+                //    No server task ⇒ cycle through gallery as idle work.
+                val sample = serverTask?.inputRef
+                    ?.takeIf { it.startsWith(LOCAL_REF_PREFIX) }
+                    ?.removePrefix(LOCAL_REF_PREFIX)
+                    ?.let { id -> samples.firstOrNull { it.id == id } }
+                    ?: samples[completed % samples.size]
+
+                // 3. Real on-device inference.
                 val bitmap = gallery.bitmapFor(sample)
                 val result = engine.classify(bitmap)
-                val hash = result.top1?.label.orEmpty() + ":" + result.top1?.confidence
 
+                // Label-only hash: deterministic across devices on the same input
+                // (confidence-bytes vary by ULP across SoC vendors and would break
+                // the N-way majority quorum on the backend).
+                val labelHash = result.top1?.label.orEmpty()
+
+                // 4. Submit result (if we had a server task) and heartbeat.
                 if (authenticated) {
                     runCatching {
-                        val integrityToken = integrity.tokenOrNull(requestHash = "$deviceId:$hash")
-                        val next = tasks.nextTask(deviceId)
-                        if (next != null) {
+                        val integrityToken = integrity.tokenOrNull(
+                            requestHash = "$deviceId:$labelHash"
+                        )
+                        if (serverTask != null) {
                             tasks.submitResult(
-                                taskId = next.taskId,
+                                taskId = serverTask.taskId,
                                 outputRef = null,
-                                resultHash = Shahada.resultTag(hash),
+                                resultHash = Shahada.resultTag(labelHash),
                                 execTimeMs = result.latencyMs,
                                 integrityToken = integrityToken
                             )
@@ -157,5 +182,6 @@ class VylexProviderWorker @AssistedInject constructor(
         private const val INTER_TASK_DELAY_MS = 1_500L
         private const val REWARD_PER_TASK = 0.002
         private const val FOREGROUND_SERVICE_TYPE_DATA_SYNC = 1
+        private const val LOCAL_REF_PREFIX = "local:"
     }
 }

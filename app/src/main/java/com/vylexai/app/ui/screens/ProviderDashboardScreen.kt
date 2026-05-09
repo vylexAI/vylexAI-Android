@@ -115,7 +115,7 @@ fun ProviderDashboardScreen(
                         "Today · ${worker.tasksCompletedToday} tasks · " +
                             "${"%.3f".format(worker.bsaiEarnedToday)} BSAI"
                     } else {
-                        "Tasks run only while charging on Wi-Fi with a safe temperature."
+                        "Tasks run while online with a healthy battery."
                     },
                     style = MaterialTheme.typography.bodySmall,
                     color = VylexPalette.Text500,
@@ -147,9 +147,10 @@ fun ProviderDashboardScreen(
                 modifier = Modifier.weight(1f)
             )
             MetricTile(
-                label = "Thermal",
-                value = "29°C",
-                accent = VylexPalette.Amber400,
+                label = "Today",
+                value = worker.tasksCompletedToday.toString(),
+                trailing = "tasks",
+                accent = VylexPalette.Cyan300,
                 modifier = Modifier.weight(1f)
             )
         }
@@ -167,9 +168,9 @@ fun ProviderDashboardScreen(
         Spacer(Modifier.height(12.dp))
         GlassCard(modifier = Modifier.fillMaxWidth()) {
             Column {
-                KeyValue("Nodes online", "2.41 M")
-                KeyValue("Current task", "Image classification · batch 512")
-                KeyValue("Avg. latency", "412 ms", last = true)
+                KeyValue("Phase", "Internal Test")
+                KeyValue("Workload", "Image classification")
+                KeyValue("Model", "MobileNetV1 · TFLite", last = true)
             }
         }
 
@@ -197,10 +198,25 @@ fun ProviderDashboardScreen(
 private fun KeyValue(k: String, v: String, last: Boolean = false) {
     Row(
         modifier = Modifier.fillMaxWidth().padding(vertical = 10.dp),
-        horizontalArrangement = Arrangement.SpaceBetween
+        horizontalArrangement = Arrangement.spacedBy(12.dp),
+        verticalAlignment = Alignment.Top
     ) {
-        Text(k, style = MaterialTheme.typography.bodyMedium, color = VylexPalette.Text500)
-        Text(v, style = MaterialTheme.typography.bodyMedium, color = VylexPalette.Text100)
+        Text(
+            text = k,
+            style = MaterialTheme.typography.bodyMedium,
+            color = VylexPalette.Text500,
+            maxLines = 1,
+            overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis
+        )
+        Text(
+            text = v,
+            style = MaterialTheme.typography.bodyMedium,
+            color = VylexPalette.Text100,
+            textAlign = androidx.compose.ui.text.style.TextAlign.End,
+            maxLines = 2,
+            overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis,
+            modifier = Modifier.weight(1f)
+        )
     }
     if (!last) Spacer(Modifier.height(0.dp))
 }

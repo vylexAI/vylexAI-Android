@@ -31,9 +31,12 @@ class WorkerController @Inject constructor(
 
     suspend fun start() {
         store.setEnabled(true)
+        // Demo phase (Internal + Closed Test): just need network and a healthy
+        // battery. Stricter constraints (UNMETERED + charging) come back on the
+        // production rollout when we ship to mass-market testers and care about
+        // not burning their cellular data or battery.
         val constraints = Constraints.Builder()
-            .setRequiredNetworkType(NetworkType.UNMETERED)
-            .setRequiresCharging(true)
+            .setRequiredNetworkType(NetworkType.CONNECTED)
             .setRequiresBatteryNotLow(true)
             .build()
 
