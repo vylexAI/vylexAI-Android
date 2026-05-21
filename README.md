@@ -5,9 +5,9 @@
 <h1 align="center">VylexAI</h1>
 
 <p align="center">
-  <strong>Decentralized AI Compute Network Powered by Global Devices.</strong><br/>
+  <strong>VylexAI — Distributed EU Compliant AI Compute &amp; Storage Network.</strong><br/>
   Turn any smartphone, laptop, or PC into a verifiable node of a global AI compute and storage layer.<br/>
-  <em>If you believe in decentralized AI, star this repo. ⭐</em>
+  <em>If you believe in distributed AI, star this repo. ⭐</em>
 </p>
 
 <p align="center">

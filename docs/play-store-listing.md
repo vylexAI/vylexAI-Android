@@ -2,7 +2,7 @@
 
 Copy for Google Play Console. Two locales: **English** (en-US) and **German** (de-DE).
 
-The app position is **"smartphones powering decentralized AI worldwide"**. The word "mining" does not appear anywhere in the listing or the UI — Google Play bans on-device cryptocurrency mining, and VylexAI does not do that.
+The app position is **"smartphones powering distributed AI worldwide"**. The word "mining" does not appear anywhere in the listing or the UI — Google Play bans on-device cryptocurrency mining, and VylexAI does not do that.
 
 ---
 
@@ -15,14 +15,14 @@ VylexAI
 
 ### Short description (80-char max)
 ```
-Your phone helps train and run AI. Decentralized. Made in Germany.
+Your phone helps train and run AI. Distributed. Made in Germany.
 ```
 (65 / 80)
 
 ### Full description (4000-char max)
 
 ```
-VylexAI turns every smartphone into a node in a global, decentralized
+VylexAI turns every smartphone into a node in a global, distributed
 AI compute network. Instead of renting from centralized data centers,
 AI workloads are routed across millions of ordinary devices — yours
 included.
@@ -100,7 +100,7 @@ VylexAI
 
 ### Short description (80-char max)
 ```
-Dein Handy hilft, KI zu trainieren und auszuführen. Dezentral. Made in Germany.
+Dein Handy hilft, KI zu trainieren und auszuführen. Verteilt. Made in Germany.
 ```
 (80 / 80)
 
@@ -108,7 +108,7 @@ Dein Handy hilft, KI zu trainieren und auszuführen. Dezentral. Made in Germany.
 
 ```
 VylexAI verwandelt jedes Smartphone in einen Knoten eines globalen,
-dezentralen KI-Rechennetzwerks. Statt zentrale Rechenzentren zu mieten,
+verteilten KI-Rechennetzwerks. Statt zentrale Rechenzentren zu mieten,
 werden KI-Workloads über Millionen alltägliche Geräte verteilt —
 einschließlich deines.
 
@@ -188,11 +188,11 @@ Layout (Ink900 #05070C background):
 - Left 40%: VylexAI brand mark (the traced tree) at 260px, tinted Cyan300 #4FE3FF
 - Right 60%: two-line wordmark
     - Line 1: **"VylexAI"** in 88pt semibold Text100 #F3F6FB
-    - Line 2: **"Decentralized AI · Made in Germany"** in 28pt medium Text300 #B8C3D9
+    - Line 2: **"Distributed AI · Made in Germany"** in 28pt medium Text300 #B8C3D9
 - Thin bottom stripe (4px) with the brand gradient Cyan300 → Azure600
 
 ## Promo video (optional — Stage 3.6)
 
-- Title on YouTube: *"VylexAI: Turning Smartphones into a Decentralized AI Network"*
+- Title on YouTube: *"VylexAI: Turning Smartphones into a Distributed AI Network"*
 - Length: 3 minutes
 - Described in detail in `SMI-123`

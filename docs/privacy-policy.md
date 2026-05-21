@@ -3,7 +3,7 @@
 **Last updated:** 2026-04-24
 **Controller:** Dudaev Systems UG, Cottbus, Germany · `hello@vylexai.com`
 
-Dudaev Systems UG ("VylexAI", "we", "us") runs the VylexAI App and the VylexAI network of decentralized AI compute. This policy explains what data the Android app collects, why we collect it, how long we keep it, and what rights you have under the **EU General Data Protection Regulation (GDPR)**.
+Dudaev Systems UG ("VylexAI", "we", "us") runs the VylexAI App and the VylexAI network of distributed AI compute. This policy explains what data the Android app collects, why we collect it, how long we keep it, and what rights you have under the **EU General Data Protection Regulation (GDPR)**.
 
 If you don't want us to process your data, do not install or sign in to the app.
 

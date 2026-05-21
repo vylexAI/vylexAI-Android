@@ -3,13 +3,13 @@
 **Last updated:** 2026-04-24
 **Operator:** Dudaev Systems UG, Cottbus, Germany · `hello@vylexai.com`
 
-These terms ("Terms") govern your use of the VylexAI App and the VylexAI network of decentralized AI compute operated by Dudaev Systems UG. By installing the app, creating an account, or toggling the Worker on, you agree to these Terms.
+These terms ("Terms") govern your use of the VylexAI App and the VylexAI network of distributed AI compute operated by Dudaev Systems UG. By installing the app, creating an account, or toggling the Worker on, you agree to these Terms.
 
 ---
 
 ## 1. What VylexAI does
 
-VylexAI is a decentralized AI compute network. The Android app has two modes:
+VylexAI is a distributed AI compute network. The Android app has two modes:
 
 - **Provider** — your phone contributes idle compute to the network while charging on Wi-Fi with a safe battery temperature. In return, the network credits your account with BSAI — a unit of account internal to the VylexAI economy.
 - **Client** — you submit AI tasks (inference, lightweight fine-tuning) and the network dispatches them across participating devices.

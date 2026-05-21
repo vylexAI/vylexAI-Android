@@ -35,7 +35,7 @@ private data class Slide(val title: String, val body: String)
 private val slides = listOf(
     Slide(
         "A network, not a data center",
-        "Millions of phones become nodes in one decentralized AI compute layer. No single company owns the intelligence."
+        "Millions of phones become nodes in one distributed AI compute layer. No single company owns the intelligence."
     ),
     Slide(
         "Your device, your participation",

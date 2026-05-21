@@ -41,7 +41,7 @@ Distributed only into ecosystem development:
 
 1. **Mint schedule.** Bitcoin halves every 210k blocks. What's our equivalent for compute/storage rewards? A flat per-task rate, halving every N tasks, or a curve?
 2. **Genesis wallets.** Hot/cold split? Multisig? Single-key? Need ops procedure before launch.
-3. **Storage rewards.** Adlan's redesign plan introduces decentralized storage as Resource #2. The same 21M cap covers both compute + storage rewards, or separate sub-caps?
+3. **Storage rewards.** Adlan's redesign plan introduces distributed storage as Resource #2. The same 21M cap covers both compute + storage rewards, or separate sub-caps?
 4. **Green energy bonus.** +10–20% multiplier — does this come out of the same 21M cap (effectively reducing other rewards), or from a separate ESG-grant pool inside the genesis reserve?
 
 ## References

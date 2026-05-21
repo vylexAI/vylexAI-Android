@@ -123,7 +123,7 @@ EN = {
         "links": "vylexai.com · github.com/vylexAI",
     },
     "s1_h": "Every device, a node of the [grad]global AI network[/].",
-    "s1_lede": "VylexAI transforms everyday devices into a decentralized network for AI compute and secure data storage.",
+    "s1_lede": "VylexAI transforms everyday devices into a distributed, EU-compliant network for AI compute and secure data storage.",
     "s2": dict(eyebrow="The problem", h="AI compute lives inside [sun]five companies[/].",
                lede="Today's intelligence runs on a handful of hyperscaler data centers. Compute is gated, expensive, and concentrated. Scaling means more concrete and more grid — and the grid is already strained.",
                stat=[("~5", "Hyperscalers control most of global AI compute"), ("3B+", "Smartphones idle every night, fully charged"), ("$200B", "2025 spend on AI compute capex — and rising")],
@@ -132,7 +132,7 @@ EN = {
     "s3": dict(eyebrow="The solution", h="One layer, [grad]two primitives[/].",
                lede="VylexAI unifies idle phones, tablets, and PCs into a single verifiable compute layer — and uses the same fleet to hold encrypted, distributed storage.",
                cards=[("Resource 1", "AI Compute", "Spare CPU / NPU cycles run inference, federated learning, validation, microtasks, and lightweight training. Each device is paid in BSAI for verified contribution."),
-                      ("Resource 2", "Decentralized Storage", "Spare device memory holds encrypted file shards, dataset shards, distributed caches, and backups. Storage providers earn BSAI per byte-day.")]),
+                      ("Resource 2", "Distributed Storage", "Spare device memory holds encrypted file shards, dataset shards, distributed caches, and backups. Storage providers earn BSAI per byte-day.")]),
     "s4": dict(eyebrow="How it works", h="Three steps. [grad]One network.[/]",
                cards=[("Step 01", "Install", "Download VylexAI on Android. Account or demo mode — one tap to start."),
                       ("Step 02", "Contribute", "While charging on Wi-Fi at safe temperature, the app contributes compute and encrypted storage in the background."),
@@ -181,9 +181,9 @@ EN = {
     "s11": dict(
         eyebrow="Comparison · AI infrastructure models",
         h="VylexAI vs. OpenAI Data Center vs. Google TPU.",
-        lede="Three approaches to scaling AI compute. VylexAI wins on cost, decentralization, and sovereignty.",
+        lede="Three approaches to scaling AI compute. VylexAI wins on cost, distribution, and sovereignty.",
         archs=[
-            ("VylexAI", "Decentralized global devices", "decentralized"),
+            ("VylexAI", "Distributed global devices", "distributed"),
             ("OpenAI DC", "Centralized GPU clusters", "centralized"),
             ("Google TPU", "Centralized TPU clusters", "centralized"),
         ],
@@ -212,7 +212,7 @@ DE["footer"] = {
     "links": "vylexai.com · github.com/vylexAI",
 }
 DE["s1_h"] = "Jedes Gerät — ein Knoten des [grad]globalen KI-Netzwerks[/]."
-DE["s1_lede"] = "VylexAI macht aus alltäglichen Geräten ein dezentrales Netzwerk für KI-Rechenleistung und sichere Datenspeicherung."
+DE["s1_lede"] = "VylexAI macht aus alltäglichen Geräten ein verteiltes, EU-konformes Netzwerk für KI-Rechenleistung und sichere Datenspeicherung."
 DE["s2"] = dict(eyebrow="Das Problem", h="KI-Rechenleistung liegt in den Händen von [sun]fünf Konzernen[/].",
                 lede="Heutige Intelligenz läuft in einer Handvoll Hyperscaler-Rechenzentren. Compute ist begrenzt, teuer und konzentriert. Skalierung bedeutet mehr Beton und mehr Stromnetz — und das Netz ist bereits überlastet.",
                 stat=[("~5", "Hyperscaler kontrollieren den Großteil der weltweiten KI-Rechenleistung"),
@@ -225,7 +225,7 @@ DE["s2"] = dict(eyebrow="Das Problem", h="KI-Rechenleistung liegt in den Händen
 DE["s3"] = dict(eyebrow="Die Lösung", h="Eine Schicht, [grad]zwei Primitive[/].",
                 lede="VylexAI bündelt ungenutzte Smartphones, Tablets und PCs zu einer überprüfbaren Rechenschicht — und nutzt dieselbe Flotte für verschlüsselten verteilten Speicher.",
                 cards=[("Ressource 1", "KI-Rechenleistung", "Freie CPU- und NPU-Zyklen führen Inferenz, Federated Learning, Validierung, Microtasks und leichtes Training aus. Jedes Gerät erhält BSAI für jeden überprüften Beitrag."),
-                       ("Ressource 2", "Dezentraler Speicher", "Freier Gerätespeicher hält verschlüsselte Datei-Shards, Dataset-Shards, verteilte Caches und Backups. Storage-Anbieter verdienen BSAI pro Byte-Tag.")])
+                       ("Ressource 2", "Verteilter Speicher", "Freier Gerätespeicher hält verschlüsselte Datei-Shards, Dataset-Shards, verteilte Caches und Backups. Storage-Anbieter verdienen BSAI pro Byte-Tag.")])
 DE["s4"] = dict(eyebrow="So funktioniert es", h="Drei Schritte. [grad]Ein Netzwerk.[/]",
                 cards=[("Schritt 01", "Installieren", "VylexAI für Android herunterladen. Konto oder Demo-Modus — ein Tippen genügt."),
                        ("Schritt 02", "Beitragen", "Während das Gerät bei sicherer Temperatur per WLAN lädt, leistet die App im Hintergrund Compute und verschlüsselten Speicher."),
@@ -270,9 +270,9 @@ DE["s10"] = dict(eyebrow="Der Bedarf", h="Pre-Seed-Runde, um [sun]das Netzwerk z
 DE["s11"] = dict(
     eyebrow="Vergleich · KI-Infrastrukturmodelle",
     h="VylexAI vs. OpenAI Data Center vs. Google TPU.",
-    lede="Drei Ansätze zur Skalierung von KI-Compute. VylexAI gewinnt bei Kosten, Dezentralisierung und Souveränität.",
+    lede="Drei Ansätze zur Skalierung von KI-Compute. VylexAI gewinnt bei Kosten, Verteilung und Souveränität.",
     archs=[
-        ("VylexAI", "Dezentrale globale Geräte", "decentralized"),
+        ("VylexAI", "Verteilte globale Geräte", "distributed"),
         ("OpenAI DC", "Zentrale GPU-Cluster", "centralized"),
         ("Google TPU", "Zentrale TPU-Cluster", "centralized"),
     ],
@@ -292,8 +292,8 @@ DE["s11"] = dict(
 
 
 def arch_icon(kind: str) -> str:
-    """Tiny SVG showing decentralized vs centralized topology."""
-    if kind == "decentralized":
+    """Tiny SVG showing distributed vs centralized topology."""
+    if kind == "distributed":
         # mesh: phones + PCs scattered, connected
         return '''<svg viewBox="0 0 220 100" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:90px;">
   <defs>

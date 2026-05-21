@@ -66,7 +66,7 @@ WELCOME_HTML = """\
           <div style="font-size:11px;letter-spacing:0.22em;text-transform:uppercase;color:#FFD166;margin-bottom:14px;">VylexAI</div>
           <h1 style="margin:0 0 12px;font-size:24px;line-height:1.2;color:#F3F6FB;">Welcome to the network.</h1>
           <p style="margin:0 0 16px;color:#B8C3D9;line-height:1.55;">
-            Your VylexAI account is live. Open the Android app, switch on Provider Mode while charging on Wi-Fi, and your phone joins a global decentralized AI compute network.
+            Your VylexAI account is live. Open the Android app, switch on Provider Mode while charging on Wi-Fi, and your phone joins a global distributed AI compute network.
           </p>
           <p style="margin:0 0 16px;color:#B8C3D9;line-height:1.55;">
             Every verified AI task and storage contribution earns you BSAI — a fixed-supply network unit (21,000,000 hard cap). During Technical Preview the BSAI balance is simulated; redeemability rolls out once our regulatory framework is in place.
