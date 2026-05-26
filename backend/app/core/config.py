@@ -14,7 +14,7 @@ class Settings(BaseSettings):
     play_integrity_package: str = "com.vylexai.app"
     env: str = "dev"
 
-    # BSAI tokenomics — see docs/bsai-economics.md
+    # BSAI economics — see docs/bsai-economics.md
     bsai_decimals: int = 8
     bsai_hard_cap: Decimal = Decimal("21000000")
     bsai_genesis_reserve: Decimal = Decimal("1100000")

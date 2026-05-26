@@ -47,7 +47,7 @@ included.
    aren't crowded out by emulators.
  • Strict worker constraints: charging + Wi-Fi + battery-not-low +
    temperature ceiling. Your phone decides, not us.
- • Custodial wallet for the technical preview. Your BSAI balance is
+ • Custodial BSAI ledger for the technical preview. Your BSAI balance is
    visible in-app from day one.
 
 ◆ Privacy, by design
@@ -132,7 +132,7 @@ einschließlich deines.
    von Emulatoren verdrängt werden.
  • Strikte Worker-Bedingungen: am Ladegerät + WLAN + Akku nicht
    schwach + Temperaturgrenze. Dein Gerät entscheidet, nicht wir.
- • Custodial Wallet im Technical Preview. Dein BSAI-Saldo ist vom
+ • Custodial BSAI-Ledger im Technical Preview. Dein BSAI-Saldo ist vom
    ersten Tag an in der App sichtbar.
 
 ◆ Datenschutz durch Design
@@ -172,7 +172,7 @@ Captured from the app running on a Pixel 8-class emulator, dark theme:
 3. **Device Scan Report** — Pixel 9 Pro card with Performance Score 842
 4. **Provider Dashboard** — Active state, metrics tiles filled with live demo data
 5. **Worker Status** — image classification in progress, top-1 label + confidence + rolling latency chart
-6. **Wallet** — BSAI balance hero card, activity feed
+6. **BSAI Balance** — BSAI balance hero card, activity feed
 
 Each screenshot gets a tagline overlay in the bottom third (large, white, medium weight):
 1. *"The AI network that lives in your pocket"*

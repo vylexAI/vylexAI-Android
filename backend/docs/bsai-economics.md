@@ -1,4 +1,4 @@
-# BSAI Tokenomics
+# BSAI Economics
 
 Source of truth: Adlan Dudaev, WhatsApp 2026-04-25, item 7 of the SMI-127 technical inputs.
 

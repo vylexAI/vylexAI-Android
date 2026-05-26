@@ -29,7 +29,7 @@ Passwords are never stored in plaintext. We store a bcrypt hash. The plaintext p
 | Runtime telemetry while the Worker is active: battery %, temperature, charging state, network type | Stop compute when constraints aren't met; keep your battery safe | Contract + legitimate interest (Art. 6(1)(f)) |
 | Task results (hash + execution time) | Network quorum verification and reward settlement | Contract |
 | Play Integrity attestation token | Detect tampering, emulators, cloned APKs — ensures honest participation | Legitimate interest |
-| BSAI ledger entries (credits + debits) | Custodial wallet balance | Contract |
+| BSAI ledger entries (credits + debits) | Custodial BSAI ledger balance | Contract |
 
 ### 1.3 Data we do **not** collect
 

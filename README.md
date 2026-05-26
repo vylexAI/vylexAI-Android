@@ -143,7 +143,7 @@ Company: **Dudaev Systems UG**, Cottbus, Germany.
 - **Android** — Kotlin 2.0.21 · Jetpack Compose (Material 3) · MVVM · Hilt · Navigation · Room · Retrofit + OkHttp · WorkManager
 - **On-device AI** — TensorFlow Lite (primary) + ONNX Runtime Mobile (wired, ready for larger models)
 - **Backend** — FastAPI · SQLAlchemy 2 async · asyncpg · Alembic · JWT · bcrypt · Postgres 16
-- **Security** — Play Integrity attestation · Android Keystore for JWT · custodial wallet for preview
+- **Security** — Play Integrity attestation · Android Keystore for JWT · custodial BSAI balance for preview
 
 ### Requirements
 
