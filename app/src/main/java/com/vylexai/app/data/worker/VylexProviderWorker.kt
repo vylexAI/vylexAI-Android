@@ -118,10 +118,28 @@ class VylexProviderWorker @AssistedInject constructor(
                     }
                 }
 
-                store.recordCompletedTask(REWARD_PER_TASK)
+                store.recordCompletedTask(REWARD_PER_TASK, result.latencyMs)
                 completed += 1
                 setForeground(buildForegroundInfo(completed))
                 delay(INTER_TASK_DELAY_MS.milliseconds)
+            }
+            // Self-reschedule: chain another expedited one-shot immediately so the
+            // counter keeps climbing instead of freezing for the periodic 15-min tick.
+            // Only if the user hasn't toggled off in the meantime.
+            if (store.currentEnabled()) {
+                val next = androidx.work.OneTimeWorkRequestBuilder<VylexProviderWorker>()
+                    .setExpedited(androidx.work.OutOfQuotaPolicy.RUN_AS_NON_EXPEDITED_WORK_REQUEST)
+                    .setConstraints(
+                        androidx.work.Constraints.Builder()
+                            .setRequiredNetworkType(androidx.work.NetworkType.CONNECTED)
+                            .build()
+                    )
+                    .build()
+                androidx.work.WorkManager.getInstance(applicationContext).enqueueUniqueWork(
+                    WORK_NAME + ":oneshot",
+                    androidx.work.ExistingWorkPolicy.REPLACE,
+                    next
+                )
             }
             return Result.success()
         } catch (e: kotlinx.coroutines.CancellationException) {

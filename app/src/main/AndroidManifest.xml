@@ -23,6 +23,9 @@
         android:enableOnBackInvokedCallback="true"
         tools:targetApi="34">
 
+        <!-- Sentry is initialized manually in VylexApp once a DSN is configured. -->
+        <meta-data android:name="io.sentry.auto-init" android:value="false" />
+
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -45,8 +48,6 @@
                 tools:node="remove" />
         </provider>
 
-        <!-- Declare WorkManager's foreground service type so lint is happy
-             and Android 14+ accepts the elevation. -->
         <service
             android:name="androidx.work.impl.foreground.SystemForegroundService"
             android:foregroundServiceType="dataSync"

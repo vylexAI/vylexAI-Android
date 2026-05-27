@@ -27,7 +27,9 @@ class ProviderWorkerViewModel @Inject constructor(
             bsaiEarnedToday = 0.0,
             lastStartedAt = 0L,
             lastHeartbeatAt = 0L,
-            lastError = null
+            lastError = null,
+            lastLatencyMs = 0,
+            latencyHistoryMs = emptyList()
         )
     )
 

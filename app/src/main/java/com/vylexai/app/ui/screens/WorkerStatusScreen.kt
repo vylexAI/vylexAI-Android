@@ -47,6 +47,14 @@ fun WorkerStatusScreen(onBack: () -> Unit, viewModel: WorkerStatusViewModel = hi
                 .padding(horizontal = 20.dp, vertical = 16.dp)
         ) {
             CurrentInferenceCard(state)
+            Spacer(Modifier.height(12.dp))
+            WorkerToggleButton(
+                isRunning = state.isRunning,
+                onStart = viewModel::start,
+                onPause = viewModel::pause
+            )
+            Spacer(Modifier.height(12.dp))
+            BatteryHintCard()
             Spacer(Modifier.height(16.dp))
             LatencyRow(state)
             Spacer(Modifier.height(16.dp))
@@ -63,6 +71,68 @@ fun WorkerStatusScreen(onBack: () -> Unit, viewModel: WorkerStatusViewModel = hi
             )
             Spacer(Modifier.height(40.dp))
         }
+    }
+}
+
+@Composable
+private fun BatteryHintCard() {
+    val context = androidx.compose.ui.platform.LocalContext.current
+    GlassCard(modifier = Modifier.fillMaxWidth()) {
+        Column {
+            Text(
+                text = "Keep it running in the background",
+                style = MaterialTheme.typography.titleSmall,
+                color = VylexPalette.Text100
+            )
+            Spacer(Modifier.height(4.dp))
+            Text(
+                text = "Some phones pause background apps to save battery, which can stop contribution. For smooth, continuous running, allow VylexAI to run unrestricted.",
+                style = MaterialTheme.typography.bodySmall,
+                color = VylexPalette.Text500
+            )
+            Spacer(Modifier.height(8.dp))
+            androidx.compose.material3.TextButton(
+                onClick = {
+                    val open = runCatching {
+                        context.startActivity(
+                            android.content.Intent(android.provider.Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS)
+                                .addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK)
+                        )
+                    }
+                    if (open.isFailure) {
+                        runCatching {
+                            context.startActivity(
+                                android.content.Intent(
+                                    android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                                    android.net.Uri.fromParts("package", context.packageName, null)
+                                ).addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK)
+                            )
+                        }
+                    }
+                },
+                contentPadding = androidx.compose.foundation.layout.PaddingValues(0.dp)
+            ) {
+                Text("Open battery settings", color = VylexPalette.Cyan300)
+            }
+        }
+    }
+}
+
+@Composable
+private fun WorkerToggleButton(
+    isRunning: Boolean,
+    onStart: () -> Unit,
+    onPause: () -> Unit
+) {
+    androidx.compose.material3.Button(
+        onClick = { if (isRunning) onPause() else onStart() },
+        modifier = Modifier.fillMaxWidth(),
+        colors = androidx.compose.material3.ButtonDefaults.buttonColors(
+            containerColor = if (isRunning) VylexPalette.Ink500 else VylexPalette.Cyan400,
+            contentColor = if (isRunning) VylexPalette.Text100 else VylexPalette.Ink900
+        )
+    ) {
+        Text(if (isRunning) "Pause worker" else "Start worker")
     }
 }
 
@@ -94,6 +164,14 @@ private fun CurrentInferenceCard(state: WorkerUiState) {
                 style = MaterialTheme.typography.bodySmall,
                 color = VylexPalette.Text500
             )
+            if (state.isRunning) {
+                Spacer(Modifier.height(10.dp))
+                Text(
+                    text = "Contributing in batches. The counter pauses briefly between batches — that's normal. It keeps running in the background while your phone is charged and online.",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = VylexPalette.Cyan300
+                )
+            }
             if (state.error != null) {
                 Spacer(Modifier.height(10.dp))
                 Text(
@@ -108,7 +186,7 @@ private fun CurrentInferenceCard(state: WorkerUiState) {
 
 @Composable
 private fun LatencyRow(state: WorkerUiState) {
-    val latest = state.latencyHistoryMs.firstOrNull() ?: 0
+    val latest = state.lastLatencyMs
     val average = if (state.latencyHistoryMs.isNotEmpty()) {
         state.latencyHistoryMs.average().toInt()
     } else {

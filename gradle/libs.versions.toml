@@ -39,6 +39,9 @@ onnxruntime = "1.20.0"
 tflite = "2.16.1"
 tflite-support = "0.4.4"
 
+# Observability
+sentry = "8.16.0"
+
 # Quality
 detekt = "1.23.7"
 ktlint = "12.1.2"
@@ -103,6 +106,9 @@ kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-t
 onnxruntime-android = { module = "com.microsoft.onnxruntime:onnxruntime-android", version.ref = "onnxruntime" }
 tensorflow-lite = { module = "org.tensorflow:tensorflow-lite", version.ref = "tflite" }
 tensorflow-lite-support = { module = "org.tensorflow:tensorflow-lite-support", version.ref = "tflite-support" }
+
+# Observability
+sentry-android = { module = "io.sentry:sentry-android", version.ref = "sentry" }
 
 # Test
 junit = { module = "junit:junit", version.ref = "junit" }

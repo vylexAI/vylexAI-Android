@@ -91,6 +91,39 @@ fun SettingsScreen(onBack: () -> Unit) {
                     ToggleRow("Network status alerts", true)
                 }
             }
+            Spacer(Modifier.height(16.dp))
+            SectionTitle("About")
+            Spacer(Modifier.height(10.dp))
+            GlassCard(modifier = Modifier.fillMaxWidth()) {
+                Column {
+                    Row(modifier = Modifier.padding(vertical = 6.dp)) {
+                        Text(
+                            "Version",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = VylexPalette.Text500,
+                            modifier = Modifier.weight(1f)
+                        )
+                        Text(
+                            "${com.vylexai.app.BuildConfig.VERSION_NAME} (${com.vylexai.app.BuildConfig.VERSION_CODE})",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = VylexPalette.Text100
+                        )
+                    }
+                    Row(modifier = Modifier.padding(vertical = 6.dp)) {
+                        Text(
+                            "Build",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = VylexPalette.Text500,
+                            modifier = Modifier.weight(1f)
+                        )
+                        Text(
+                            com.vylexai.app.BuildConfig.BUILD_TYPE,
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = VylexPalette.Text100
+                        )
+                    }
+                }
+            }
             Spacer(Modifier.height(40.dp))
         }
     }

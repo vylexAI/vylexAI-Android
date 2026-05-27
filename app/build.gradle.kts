@@ -55,11 +55,19 @@ android {
         applicationId = "com.vylexai.app"
         minSdk = 26
         targetSdk = 35
-        versionCode = 4
-        versionName = "0.1.3"
+        versionCode = 12
+        versionName = "0.1.11"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables { useSupportLibrary = true }
+
+        // GlitchTip DSN — a client-side ingest key (ships in the APK anyway), so
+        // the self-hosted default is committed. Override with VYLEX_SENTRY_DSN.
+        buildConfigField(
+            "String",
+            "SENTRY_DSN",
+            "\"${System.getenv("VYLEX_SENTRY_DSN") ?: "https://1d72273318e14768adf53135a0382367@glitchtip.vylexai.com/1"}\""
+        )
     }
 
     signingConfigs {
@@ -92,6 +100,8 @@ android {
         release {
             isMinifyEnabled = true
             isShrinkResources = true
+            // Bundle native debug symbols so Play symbolicates native crash traces.
+            ndk { debugSymbolLevel = "FULL" }
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -199,6 +209,9 @@ dependencies {
     implementation(libs.onnxruntime.android)
     implementation(libs.tensorflow.lite)
     implementation(libs.tensorflow.lite.support)
+
+    // Observability — crash + ANR reporting (self-hosted GlitchTip / Sentry-compatible)
+    implementation(libs.sentry.android)
 
     // Test
     testImplementation(libs.junit)

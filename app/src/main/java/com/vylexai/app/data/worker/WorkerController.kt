@@ -31,18 +31,20 @@ class WorkerController @Inject constructor(
 
     suspend fun start() {
         store.setEnabled(true)
-        // Demo phase (Internal + Closed Test): just need network and a healthy
-        // battery. Stricter constraints (UNMETERED + charging) come back on the
-        // production rollout when we ship to mass-market testers and care about
-        // not burning their cellular data or battery.
-        val constraints = Constraints.Builder()
+        // Expedited jobs only support network + storage constraints
+        // (IllegalArgumentException at WorkRequest.Builder.build otherwise).
+        val expeditedConstraints = Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .build()
+        // Periodic worker can carry the battery-not-low guard.
+        val periodicConstraints = Constraints.Builder()
             .setRequiredNetworkType(NetworkType.CONNECTED)
             .setRequiresBatteryNotLow(true)
             .build()
 
         val oneShot = OneTimeWorkRequestBuilder<VylexProviderWorker>()
             .setExpedited(OutOfQuotaPolicy.RUN_AS_NON_EXPEDITED_WORK_REQUEST)
-            .setConstraints(constraints)
+            .setConstraints(expeditedConstraints)
             .build()
         workManager.enqueueUniqueWork(
             VylexProviderWorker.WORK_NAME + ":oneshot",
@@ -54,7 +56,7 @@ class WorkerController @Inject constructor(
             PERIODIC_INTERVAL_MINUTES,
             TimeUnit.MINUTES
         )
-            .setConstraints(constraints)
+            .setConstraints(periodicConstraints)
             .build()
         workManager.enqueueUniquePeriodicWork(
             VylexProviderWorker.WORK_NAME,
