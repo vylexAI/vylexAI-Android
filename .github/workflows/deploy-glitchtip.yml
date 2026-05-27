@@ -1,0 +1,92 @@
+name: Deploy GlitchTip
+
+# Manual only — stands up / updates the self-hosted GlitchTip stack on the
+# Hetzner box, reusing the same DEPLOY_* secrets as the Coordinator deploy.
+on:
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-glitchtip
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Deploy GlitchTip to Hetzner
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: https://glitchtip.vylexai.com
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Rsync GlitchTip stack to host
+        uses: burnett01/rsync-deployments@7.0.1
+        with:
+          switches: -avz --delete
+          path: backend/glitchtip/
+          remote_path: /opt/vylex/glitchtip/
+          remote_host: ${{ secrets.DEPLOY_HOST }}
+          remote_user: ${{ secrets.DEPLOY_USER }}
+          remote_key: ${{ secrets.DEPLOY_SSH_KEY }}
+
+      - name: Rsync updated Caddyfile to coordinator dir
+        uses: burnett01/rsync-deployments@7.0.1
+        with:
+          switches: -avz
+          path: backend/Caddyfile
+          remote_path: /opt/vylex/coordinator/
+          remote_host: ${{ secrets.DEPLOY_HOST }}
+          remote_user: ${{ secrets.DEPLOY_USER }}
+          remote_key: ${{ secrets.DEPLOY_SSH_KEY }}
+
+      - name: Deploy via SSH (capacity-guarded)
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USER }}
+          key: ${{ secrets.DEPLOY_SSH_KEY }}
+          envs: GLITCHTIP_SECRET_KEY,GLITCHTIP_POSTGRES_PASSWORD
+          script: |
+            set -euo pipefail
+
+            # Safety guard: refuse to start GlitchTip if the box is low on RAM,
+            # so we can never OOM and take down the live Coordinator.
+            AVAIL=$(free -m | awk '/^Mem:/{print $7}')
+            echo "Available RAM: ${AVAIL} MB"
+            if [ "${AVAIL:-0}" -lt 1200 ]; then
+              echo "ABORT: only ${AVAIL} MB RAM available (<1200). Refusing to start"
+              echo "GlitchTip to protect the Coordinator. Use a separate box."
+              exit 1
+            fi
+
+            mkdir -p /opt/vylex/glitchtip
+            umask 077
+            cat > /opt/vylex/glitchtip/.env <<EOF
+            GLITCHTIP_SECRET_KEY=${GLITCHTIP_SECRET_KEY}
+            GLITCHTIP_POSTGRES_PASSWORD=${GLITCHTIP_POSTGRES_PASSWORD}
+            GLITCHTIP_EMAIL_URL=consolemail://
+            GLITCHTIP_OPEN_REGISTRATION=true
+            EOF
+
+            cd /opt/vylex/glitchtip
+            docker compose --env-file .env -p glitchtip pull
+            docker compose --env-file .env -p glitchtip up -d --remove-orphans
+
+            # Reload Caddy so the new glitchtip.vylexai.com vhost goes live.
+            cd /opt/vylex/coordinator
+            docker compose -f docker-compose.prod.yml exec -T caddy \
+              caddy reload --config /etc/caddy/Caddyfile \
+              || docker compose -f docker-compose.prod.yml restart caddy
+
+            docker image prune -f
+
+      - name: Smoke check
+        run: |
+          for i in $(seq 1 18); do
+            code=$(curl -s -o /dev/null -w "%{http_code}" https://glitchtip.vylexai.com/_health/ || true)
+            echo "attempt $i: HTTP $code"
+            [ "$code" = "200" ] && exit 0
+            sleep 10
+          done
+          echo "GlitchTip did not return 200 from /_health/ in time"
+          exit 1

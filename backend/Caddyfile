@@ -50,3 +50,25 @@ vylexai.com, www.vylexai.com {
         header_up X-Forwarded-Proto {scheme}
     }
 }
+
+# ─── GlitchTip — self-hosted crash/error backend ─────────────────────────────
+# Reached on the shared `vylex` network; the stack lives in
+# backend/glitchtip/docker-compose.yml (deploy-glitchtip.yml workflow).
+glitchtip.vylexai.com {
+    encode zstd gzip
+
+    header {
+        -Server
+        -X-Powered-By
+        Strict-Transport-Security "max-age=31536000; includeSubDomains"
+        X-Content-Type-Options "nosniff"
+        Referrer-Policy "no-referrer"
+    }
+
+    reverse_proxy glitchtip-web:8080 {
+        header_up Host {host}
+        header_up X-Real-IP {remote}
+        header_up X-Forwarded-For {remote}
+        header_up X-Forwarded-Proto {scheme}
+    }
+}

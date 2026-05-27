@@ -1,0 +1,101 @@
+# GlitchTip — self-hosted, Sentry-compatible crash/error backend for VylexAI.
+#
+# Isolated sibling stack to the Coordinator: its Postgres + Redis live on a
+# private network and are NEVER shared with the Coordinator's database. Only
+# `glitchtip-web` joins the external `vylex` network so the existing Caddy can
+# reverse-proxy glitchtip.vylexai.com -> glitchtip-web:8080.
+#
+# Host env file expected at /etc/vylex/glitchtip.env (see .env.example):
+#   GLITCHTIP_SECRET_KEY, GLITCHTIP_POSTGRES_PASSWORD
+#
+# Bring up:  docker compose --env-file /etc/vylex/glitchtip.env -p glitchtip up -d
+
+x-glitchtip-env: &glitchtip-env
+  DATABASE_URL: "postgres://glitchtip:${GLITCHTIP_POSTGRES_PASSWORD:?required}@glitchtip-postgres:5432/glitchtip"
+  REDIS_URL: "redis://glitchtip-redis:6379/0"
+  SECRET_KEY: ${GLITCHTIP_SECRET_KEY:?required}
+  PORT: "8080"
+  GLITCHTIP_DOMAIN: "https://glitchtip.vylexai.com"
+  DEFAULT_FROM_EMAIL: "glitchtip@vylexai.com"
+  EMAIL_URL: ${GLITCHTIP_EMAIL_URL:-consolemail://}
+  # Open registration is left ON for the very first signup, then turn OFF
+  # (set to "false") once the VylexAI org + first user exist.
+  ENABLE_OPEN_USER_REGISTRATION: ${GLITCHTIP_OPEN_REGISTRATION:-true}
+  CELERY_WORKER_AUTOSCALE: "1,2"
+  CELERY_WORKER_MAX_TASKS_PER_CHILD: "10000"
+
+services:
+  glitchtip-postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: glitchtip
+      POSTGRES_PASSWORD: ${GLITCHTIP_POSTGRES_PASSWORD:?required}
+      POSTGRES_DB: glitchtip
+    volumes:
+      - glitchtip-pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U glitchtip"]
+      interval: 10s
+      timeout: 3s
+      retries: 10
+    networks: [glitchtip-internal]
+
+  glitchtip-redis:
+    image: valkey/valkey:8-alpine
+    restart: unless-stopped
+    networks: [glitchtip-internal]
+
+  glitchtip-migrate:
+    image: glitchtip/glitchtip:6.1.6
+    depends_on:
+      glitchtip-postgres:
+        condition: service_healthy
+    command: ./manage.py migrate
+    environment: *glitchtip-env
+    networks: [glitchtip-internal]
+    restart: "no"
+
+  glitchtip-web:
+    image: glitchtip/glitchtip:6.1.6
+    restart: unless-stopped
+    depends_on:
+      glitchtip-postgres:
+        condition: service_healthy
+      glitchtip-redis:
+        condition: service_started
+      glitchtip-migrate:
+        condition: service_completed_successfully
+    environment: *glitchtip-env
+    volumes:
+      - glitchtip-uploads:/code/uploads
+    networks: [glitchtip-internal, vylex]
+
+  glitchtip-worker:
+    image: glitchtip/glitchtip:6.1.6
+    restart: unless-stopped
+    command: ./bin/run-celery-with-beat.sh
+    depends_on:
+      glitchtip-postgres:
+        condition: service_healthy
+      glitchtip-redis:
+        condition: service_started
+      glitchtip-migrate:
+        condition: service_completed_successfully
+    environment: *glitchtip-env
+    volumes:
+      - glitchtip-uploads:/code/uploads
+    networks: [glitchtip-internal]
+
+volumes:
+  glitchtip-pgdata:
+  glitchtip-uploads:
+
+networks:
+  # Private to this stack — db/redis/worker never leave it.
+  glitchtip-internal:
+    name: glitchtip-internal
+  # The Coordinator's shared network; Caddy reaches glitchtip-web here.
+  vylex:
+    name: vylex
+    external: true
