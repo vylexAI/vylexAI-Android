@@ -19,7 +19,7 @@ play-integrity = "1.4.0"
 compose-bom = "2024.12.01"
 
 # Hilt
-hilt = "2.52"
+hilt = "2.59.2"
 hilt-navigation-compose = "1.2.0"
 
 # Network
