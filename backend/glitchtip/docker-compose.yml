@@ -95,7 +95,8 @@ networks:
   # Private to this stack — db/redis/worker never leave it.
   glitchtip-internal:
     name: glitchtip-internal
-  # The Coordinator's shared network; Caddy reaches glitchtip-web here.
+  # The Coordinator's shared network (compose-prefixed name on the box); Caddy
+  # reaches glitchtip-web here.
   vylex:
-    name: vylex
+    name: vylex_vylex
     external: true
