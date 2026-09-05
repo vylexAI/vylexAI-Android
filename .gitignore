@@ -28,6 +28,9 @@ keystore.properties
 *.jks
 *.keystore
 keystores/
+# Google Play service-account key for gradle-play-publisher (never commit — public repo)
+play-service-account.json
+*-play-service-account.json
 *.password.txt
 release/
 

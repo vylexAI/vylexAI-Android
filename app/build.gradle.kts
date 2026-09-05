@@ -8,6 +8,7 @@ plugins {
     alias(libs.plugins.ksp)
     kotlin("kapt")
     alias(libs.plugins.hilt)
+    alias(libs.plugins.play.publisher)
 }
 
 kapt {
@@ -152,6 +153,33 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+}
+
+/**
+ * Google Play publishing (gradle-play-publisher).
+ *
+ * Lets us push a signed AAB to a Play track from the CLI / CI instead of the
+ * web console:  `./gradlew :app:publishReleaseBundle`  (default track: internal).
+ *
+ * Credentials (a Google Cloud service-account JSON, granted access in Play
+ * Console → Setup → API access) are resolved, never committed:
+ *   1. CI:    env var  PLAY_SERVICE_ACCOUNT_JSON  → absolute path to the key
+ *   2. Local: `play-service-account.json` at the repo root (gitignored)
+ * The file is only read when a publish task actually runs, so normal
+ * builds (assembleDebug, bundleRelease) work with no credentials present.
+ */
+play {
+    val credsPath = System.getenv("PLAY_SERVICE_ACCOUNT_JSON")
+        ?.takeIf { it.isNotBlank() }
+        ?.let { file(it) }
+        ?: rootProject.file("play-service-account.json")
+    serviceAccountCredentials.set(credsPath)
+    defaultToAppBundles.set(true)
+    // Ship to the internal-testing track by default; override per-invocation with
+    //   ./gradlew :app:publishReleaseBundle --track beta
+    track.set("internal")
+    // COMPLETED = live to the track's testers immediately (right for internal).
+    releaseStatus.set(com.github.triplet.gradle.androidpublisher.ReleaseStatus.COMPLETED)
 }
 
 dependencies {
