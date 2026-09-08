@@ -16,6 +16,18 @@ api.vylexai.com {
         Referrer-Policy "no-referrer"
     }
 
+    # Analytics API (VYL-80) — the versioned metrics API is served by the
+    # separate `analytics` container; route that path prefix there. Everything
+    # else falls through to the coordinator. The coordinator uses no /api/v1/*
+    # paths, so this split is safe.
+    @analytics path /api/v1/*
+    reverse_proxy @analytics analytics:8000 {
+        header_up Host {host}
+        header_up X-Real-IP {remote}
+        header_up X-Forwarded-For {remote}
+        header_up X-Forwarded-Proto {scheme}
+    }
+
     reverse_proxy app:8000 {
         header_up Host {host}
         header_up X-Real-IP {remote}
