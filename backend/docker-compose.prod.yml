@@ -43,6 +43,37 @@ services:
       start_period: 20s
     networks: [vylex]
 
+  # Analytics API (VYL-80) — separate FastAPI service from
+  # github.com/Daniyal26/vylexai-analytics. Serves /api/v1/metrics/* ; Caddy
+  # routes that path prefix here (see Caddyfile). Reads the ledger read-only and
+  # keeps its own read-write analytics DB. Image is built + pushed by that repo's
+  # deploy workflow; set ANALYTICS_TAG in coordinator.env (defaults to latest).
+  # Required env in /etc/vylex/coordinator.env:
+  #   ANALYTICS_DB_RO_PASSWORD, ANALYTICS_DB_RW_PASSWORD, ANALYTICS_API_TOKEN
+  # (+ create the DB users/DB per backend/ANALYTICS-DEPLOY.md before first up).
+  analytics:
+    image: ghcr.io/daniyal26/vylexai-analytics:${ANALYTICS_TAG:-latest}
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      VYL_ENVIRONMENT: production
+      VYL_DOCS_ENABLED: "false"
+      # Read-only role on the coordinator ledger DB.
+      VYL_DATABASE_URL: "postgresql+asyncpg://vylex_ro:${ANALYTICS_DB_RO_PASSWORD:?required}@postgres:5432/vylex"
+      # Read-write role on the analytics DB (owns the analytics schema).
+      VYL_ANALYTICS_DATABASE_URL: "postgresql+asyncpg://vylex_analytics:${ANALYTICS_DB_RW_PASSWORD:?required}@postgres:5432/vylex_analytics"
+      # Bearer-token gate on /api/v1/* — the dashboard sends this.
+      VYL_API_TOKEN: ${ANALYTICS_API_TOKEN:?required}
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request,sys; sys.exit(0 if urllib.request.urlopen('http://127.0.0.1:8000/healthz', timeout=3).status==200 else 1)"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+    networks: [vylex]
+
   caddy:
     image: caddy:2-alpine
     restart: unless-stopped
