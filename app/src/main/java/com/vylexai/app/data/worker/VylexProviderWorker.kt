@@ -61,7 +61,11 @@ class VylexProviderWorker @AssistedInject constructor(
         var completed = 0
         try {
             val samples = gallery.samples
-            while (completed < MAX_TASKS_PER_INVOCATION) {
+            // Run continuously while the node is enabled and not cancelled, so the
+            // BSAI counter climbs without the ~15-minute WorkManager burst gaps of
+            // the old model (VYL-33). One long-running foreground worker replaces
+            // the burst + periodic-restart + self-reschedule scheme.
+            while (!isStopped && store.currentEnabled()) {
                 // 1. Pull a server-dispatched task first (best-effort).
                 //    On network/auth failure we fall through to local-only inference
                 //    so the local UI still shows meaningful telemetry.
@@ -123,24 +127,9 @@ class VylexProviderWorker @AssistedInject constructor(
                 setForeground(buildForegroundInfo(completed))
                 delay(INTER_TASK_DELAY_MS.milliseconds)
             }
-            // Self-reschedule: chain another expedited one-shot immediately so the
-            // counter keeps climbing instead of freezing for the periodic 15-min tick.
-            // Only if the user hasn't toggled off in the meantime.
-            if (store.currentEnabled()) {
-                val next = androidx.work.OneTimeWorkRequestBuilder<VylexProviderWorker>()
-                    .setExpedited(androidx.work.OutOfQuotaPolicy.RUN_AS_NON_EXPEDITED_WORK_REQUEST)
-                    .setConstraints(
-                        androidx.work.Constraints.Builder()
-                            .setRequiredNetworkType(androidx.work.NetworkType.CONNECTED)
-                            .build()
-                    )
-                    .build()
-                androidx.work.WorkManager.getInstance(applicationContext).enqueueUniqueWork(
-                    WORK_NAME + ":oneshot",
-                    androidx.work.ExistingWorkPolicy.REPLACE,
-                    next
-                )
-            }
+            // Loop exits only when the user toggles the node off (currentEnabled=false)
+            // or WorkManager cancels the work (isStopped). No self-reschedule needed —
+            // this single worker ran the whole time.
             return Result.success()
         } catch (e: kotlinx.coroutines.CancellationException) {
             throw e
@@ -196,7 +185,6 @@ class VylexProviderWorker @AssistedInject constructor(
         const val CHANNEL_ID = "vylex_worker"
         const val NOTIFICATION_ID = 4721
 
-        private const val MAX_TASKS_PER_INVOCATION = 200
         private const val INTER_TASK_DELAY_MS = 1_500L
         private const val REWARD_PER_TASK = 0.002
         private const val FOREGROUND_SERVICE_TYPE_DATA_SYNC = 1

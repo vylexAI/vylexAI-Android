@@ -47,3 +47,6 @@ _secrets_local/
 
 # Local backup of old sample assets (git history is the canonical store)
 app/src/main/assets/samples_backup_*/
+
+# Google Play service-account key (never commit — public repo)
+play-service-account.json
