@@ -53,7 +53,7 @@ fun ModeSelectScreen(onSelect: (Mode) -> Unit) {
             icon = Icons.Rounded.Bolt,
             title = "Provider",
             tagline = "Lend compute, earn BSAI",
-            body = "Your device joins the network as a node. When it's charging and on Wi-Fi, we route lightweight AI tasks to it and pay you in BSAI.",
+            body = "Your device joins the network as a node. When it's charging and on Wi-Fi, we route lightweight AI tasks to it and reward you with BSAI.",
             onClick = { onSelect(Mode.Provider) }
         )
         Spacer(Modifier.height(16.dp))

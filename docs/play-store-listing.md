@@ -31,8 +31,8 @@ included.
 
  • Provider. When you're charging on Wi-Fi with a safe battery
    temperature, your phone joins the network and runs lightweight AI
-   tasks. You earn BSAI — the network's unit of account — for every
-   verified contribution.
+   tasks. You earn BSAI — non-transferable reward points — for
+   every verified contribution.
 
  • Client. Submit inference or lightweight fine-tuning tasks. They get
    dispatched across available devices and return to you quickly, at a
@@ -66,9 +66,10 @@ with EU AI Act principles of transparency and auditability.
 
 ◆ Technical preview
 
-This release is a technical preview. BSAI balances reflect network
-contribution during the preview period and do not have monetary value
-until the production economy launches separately.
+This release is a technical preview. BSAI are non-transferable reward
+points that recognize your network contribution. They are not a
+currency, security, or payment instrument, and are not for sale or
+exchange.
 
 Terms: https://vylexai.com/terms
 Privacy: https://vylexai.com/privacy
@@ -116,7 +117,7 @@ einschließlich deines.
 
  • Provider. Beim Laden über WLAN und bei sicherer Akkutemperatur
    tritt dein Gerät dem Netzwerk bei und führt leichte KI-Aufgaben
-   aus. Du verdienst BSAI — die Rechnungseinheit des Netzwerks — für
+   aus. Du verdienst BSAI — nicht übertragbare Bonuspunkte — für
    jeden verifizierten Beitrag.
 
  • Client. Sende Inferenz- oder leichte Fine-Tuning-Aufgaben. Sie
@@ -152,9 +153,10 @@ Nachvollziehbarkeit.
 
 ◆ Technical Preview
 
-Diese Version ist eine technische Vorschau. BSAI-Salden spiegeln den
-Netzwerkbeitrag während der Vorschauphase wider und haben bis zum
-separaten Start der produktiven Ökonomie keinen Geldwert.
+Diese Version ist eine technische Vorschau. BSAI sind nicht
+übertragbare Bonuspunkte, die deinen Netzwerkbeitrag anerkennen. Sie
+sind keine Währung, kein Wertpapier und kein Zahlungsmittel und stehen
+nicht zum Verkauf oder Tausch.
 
 AGB: https://vylexai.com/terms
 Datenschutz: https://vylexai.com/privacy

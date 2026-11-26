@@ -88,7 +88,7 @@ fun ClientDashboardScreen(
                 modifier = Modifier.weight(1f)
             )
             MetricTile(
-                label = "This month spend",
+                label = "Used this month",
                 value = formatBsaiAmount(dash.bsaiSpent),
                 trailing = "BSAI",
                 accent = VylexPalette.Cyan300,

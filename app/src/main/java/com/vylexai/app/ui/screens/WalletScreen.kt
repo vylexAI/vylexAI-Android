@@ -38,8 +38,6 @@ import com.vylexai.app.ui.theme.VylexPalette
 import com.vylexai.app.ui.theme.VylexTheme
 import java.math.BigDecimal
 
-private const val USD_PER_BSAI = 7.69
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WalletScreen(onBack: () -> Unit, viewModel: WalletViewModel = hiltViewModel()) {
@@ -94,15 +92,10 @@ private fun BalanceHero(state: WalletUiState) {
                 style = MaterialTheme.typography.displayLarge,
                 color = VylexPalette.Ink900
             )
-            Text(
-                text = "≈ \$${formatUsd(state.balanceBsai)}",
-                style = MaterialTheme.typography.titleMedium,
-                color = VylexPalette.Ink900.copy(alpha = 0.7f)
-            )
             Spacer(Modifier.height(16.dp))
             Text(
                 text = when (state.kind) {
-                    WalletKind.Live -> "Held by VylexAI custody · withdrawals open at public beta"
+                    WalletKind.Live -> "Non-transferable reward points · technical preview"
                     WalletKind.Loading -> "Refreshing…"
                     WalletKind.Error -> state.message ?: "Couldn't reach the network"
                     WalletKind.Demo -> "Technical preview · simulated balance"
@@ -119,7 +112,7 @@ private fun ActivityList() {
     listOf(
         Triple("Network reward", "+0.018 BSAI", true),
         Triple("Network reward", "+0.023 BSAI", true),
-        Triple("Task payment", "-0.41 BSAI", false),
+        Triple("Task submitted", "-0.41 BSAI", false),
         Triple("Network reward", "+0.019 BSAI", true)
     ).forEach { (label, amount, incoming) ->
         GlassCard(modifier = Modifier.fillMaxWidth()) {
@@ -168,11 +161,6 @@ private fun formatBsai(amount: BigDecimal): String {
     return rounded.toPlainString()
 }
 
-private fun formatUsd(amount: BigDecimal): String {
-    val usd = amount.multiply(BigDecimal(USD_PER_BSAI))
-        .setScale(2, java.math.RoundingMode.HALF_UP)
-    return usd.toPlainString()
-}
 
 @Preview
 @Composable

@@ -1,5 +1,6 @@
 package com.vylexai.app.ui.screens
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -23,6 +24,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.vylexai.app.ui.components.GlassCard
@@ -92,6 +94,20 @@ fun SettingsScreen(onBack: () -> Unit) {
                 }
             }
             Spacer(Modifier.height(16.dp))
+            SectionTitle("Account")
+            Spacer(Modifier.height(10.dp))
+            GlassCard(modifier = Modifier.fillMaxWidth()) {
+                val uriHandler = LocalUriHandler.current
+                Column {
+                    LinkRow("Privacy policy", VylexPalette.Text100) {
+                        uriHandler.openUri("https://vylexai.com/privacy")
+                    }
+                    LinkRow("Delete account", VylexPalette.Rose400) {
+                        uriHandler.openUri("https://vylexai.com/account-deletion")
+                    }
+                }
+            }
+            Spacer(Modifier.height(16.dp))
             SectionTitle("About")
             Spacer(Modifier.height(10.dp))
             GlassCard(modifier = Modifier.fillMaxWidth()) {
@@ -126,6 +142,25 @@ fun SettingsScreen(onBack: () -> Unit) {
             }
             Spacer(Modifier.height(40.dp))
         }
+    }
+}
+
+@Composable
+private fun LinkRow(label: String, color: androidx.compose.ui.graphics.Color, onClick: () -> Unit) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(onClick = onClick)
+            .padding(vertical = 12.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            label,
+            style = MaterialTheme.typography.bodyMedium,
+            color = color,
+            modifier = Modifier.weight(1f)
+        )
+        Text("›", style = MaterialTheme.typography.titleMedium, color = VylexPalette.Text500)
     }
 }
 
